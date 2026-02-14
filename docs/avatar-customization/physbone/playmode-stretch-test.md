@@ -6,6 +6,10 @@
 2. Unity プロジェクト側で Download / Import します。
 3. `Assets/FreeFlyCamera/Scripts/FreeFlyCamera` を `Main Camera` にドラッグ & ドロップします。
 
+![FreeFlyCamera の導入と Play Mode 準備](./images/04-freeflycamera-a.jpg)
+![Asset Store 側の FreeFlyCamera 情報](./images/05-freeflycamera-b.png)
+![Main Camera へのアタッチ例](./images/06-freeflycamera-c.png)
+
 ## Play Mode での確認
 
 1. `Play` を押します。
@@ -14,6 +18,9 @@
 4. `Esc` を押してカーソルを戻します。
 5. `Main Camera` を選択し、`Active` をオフにします。
 6. Scene で尻尾などをつかんで引っ張り、伸び方を確認します。
+
+![Play Mode 中の操作手順](./images/07-playmode-a.jpg)
+![Main Camera の Active 切替位置](./images/08-playmode-b.jpg)
 
 ## チェック観点
 
