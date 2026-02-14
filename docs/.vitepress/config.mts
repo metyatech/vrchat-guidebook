@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitepress'
 
 const siteUrl = process.env.SITE_URL || 'https://metyatech.github.io'
+const siteBase = process.env.SITE_BASE || '/vrchat-guidebook/'
 
 export default defineConfig({
   lang: 'ja-JP',
-  base: '/vrchat-guidebook/',
+  base: siteBase,
   sitemap: {
     hostname: siteUrl
   },

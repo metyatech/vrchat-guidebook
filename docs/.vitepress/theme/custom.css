@@ -31,6 +31,17 @@
   --guide-section-bg: rgba(255, 255, 255, 0.78);
   --guide-check-border: rgba(0, 148, 199, 0.9);
   --guide-check-bg: rgba(248, 252, 255, 0.9);
+
+  --guide-feature-border: rgba(0, 107, 158, 0.55);
+  --guide-feature-bg: linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(227, 238, 255, 0.95));
+  --guide-feature-shadow: 0 16px 30px rgba(27, 47, 80, 0.18);
+
+  --guide-active-link-color: #123b6e;
+  --guide-nav-link-color: #214f84;
+  --guide-nav-link-active-color: #103d72;
+  --guide-brand-button-bg: #006ba8;
+  --guide-brand-button-bg-hover: #005b90;
+  --guide-brand-button-text: #f6fbff;
 }
 
 .dark {
@@ -63,6 +74,17 @@
   --guide-section-bg: rgba(10, 25, 48, 0.56);
   --guide-check-border: rgba(0, 194, 255, 0.9);
   --guide-check-bg: rgba(6, 19, 38, 0.7);
+
+  --guide-feature-border: rgba(123, 227, 255, 0.62);
+  --guide-feature-bg: linear-gradient(155deg, rgba(13, 30, 57, 0.9), rgba(14, 33, 63, 0.86));
+  --guide-feature-shadow: 0 18px 32px rgba(2, 10, 28, 0.48);
+
+  --guide-active-link-color: #b6e7ff;
+  --guide-nav-link-color: #a8ddff;
+  --guide-nav-link-active-color: #d6f2ff;
+  --guide-brand-button-bg: #0070ad;
+  --guide-brand-button-bg-hover: #005f92;
+  --guide-brand-button-text: #f5fbff;
 }
 
 .Layout {
@@ -80,6 +102,46 @@
 
 .VPHero .tagline {
   color: var(--vp-c-text-2);
+}
+
+.VPSidebar .VPLink.link.active > p,
+.VPSidebar .VPLink.link.active > span {
+  color: var(--guide-active-link-color);
+  font-weight: 700;
+}
+
+.VPNavBarMenuLink,
+.VPSidebar .VPLink.link .text,
+.VPSidebar .VPLink.link p {
+  color: var(--guide-nav-link-color) !important;
+}
+
+.VPNavBarMenuLink.active,
+.VPNavBarMenuLink.active span,
+.VPSidebar .VPLink.link.active .text,
+.VPSidebar .VPLink.link.active p,
+.VPSidebar .VPLink.link[aria-current='page'] .text,
+.VPSidebar .VPLink.link[aria-current='page'] p {
+  color: var(--guide-nav-link-active-color) !important;
+}
+
+.VPHero .actions .VPButton.brand {
+  background-color: var(--guide-brand-button-bg);
+  border-color: var(--guide-brand-button-bg);
+  color: var(--guide-brand-button-text);
+}
+
+.VPHero .actions .VPButton.brand:hover,
+.VPHero .actions .VPButton.brand:focus-visible {
+  background-color: var(--guide-brand-button-bg-hover);
+  border-color: var(--guide-brand-button-bg-hover);
+  color: var(--guide-brand-button-text);
+}
+
+.VPFeatures .VPFeature {
+  border: 1px solid var(--guide-feature-border);
+  background: var(--guide-feature-bg);
+  box-shadow: var(--guide-feature-shadow);
 }
 
 .guide-grid {

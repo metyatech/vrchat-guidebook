@@ -6,7 +6,7 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:build:local": "cross-env SITE_URL=http://127.0.0.1:4174 vitepress build docs",
+    "docs:build:local": "cross-env SITE_URL=http://127.0.0.1:4174 SITE_BASE=/ vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:preview:host": "vitepress preview docs --host 127.0.0.1 --port 4174",
     "lint:a11y": "npm run docs:build:local && node scripts/run-pa11y.cjs",
