@@ -145,6 +145,25 @@ def wait_for_unity_window(process_id: int, timeout_seconds: int):
     raise RuntimeError("Unity window was not detected before timeout.")
 
 
+def stabilize_unity_window(process_id: int, timeout_seconds: int):
+    deadline = time.time() + timeout_seconds
+    last_error: Exception | None = None
+
+    while time.time() < deadline:
+        try:
+            window = wait_for_unity_window(process_id, 10)
+            rect = window.rectangle()
+            if (rect.right - rect.left) > 320 and (rect.bottom - rect.top) > 240:
+                return (window, rect)
+        except Exception as error:
+            last_error = error
+        time.sleep(1)
+
+    if last_error:
+        raise RuntimeError(f"Unity window was not stable: {last_error}") from last_error
+    raise RuntimeError("Unity window was not stable before timeout.")
+
+
 def capture_window(window, output_path: Path) -> None:
     rect = window.rectangle()
     image = ImageGrab.grab((rect.left, rect.top, rect.right, rect.bottom), all_screens=True)
@@ -342,7 +361,7 @@ def main() -> int:
             mouse.click(coords=(rect.left + 36, rect.top + 24))
         time.sleep(1)
 
-        window_rect = window.rectangle()
+        window, window_rect = stabilize_unity_window(unity_process.pid, 45)
         width = window_rect.right - window_rect.left
         height = window_rect.bottom - window_rect.top
 

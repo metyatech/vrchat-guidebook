@@ -56,6 +56,9 @@ npm run lint:contrast
 - `automation/robot/web-example.robot`: Robot Framework で Web 操作を実行
 - `automation/robot/unity-editor-basic.robot`: Robot Framework から Unity Editor 実機フローを実行
 
+注釈は Robot キーワード側で共通化しています（`automation/robot/resources/doc_keywords.resource`）。
+現状は `click` と `dragDrop` を扱い、将来的にテキストラベル等を追加できる構成です。
+
 ### 実行コマンド
 
 ```bash
