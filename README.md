@@ -53,8 +53,8 @@ npm run lint:contrast
 
 ### シナリオ
 
-- `automation/scenarios/web-example.yaml`: Playwright で Web 操作を実行
-- `automation/scenarios/unity-editor-basic.yaml`: command driver 経由で Unity Editor 実機フローを実行
+- `automation/robot/web-example.robot`: Robot Framework で Web 操作を実行
+- `automation/robot/unity-editor-basic.robot`: Robot Framework から Unity Editor 実機フローを実行
 
 ### 実行コマンド
 
@@ -64,9 +64,10 @@ npm run guide:build:unity
 npm run guide:build
 ```
 
-Unity 側の前提セットアップ:
+Robot + Unity 側の前提セットアップ:
 
 ```bash
+python -m pip install -r automation/robot/requirements.txt
 python -m pip install -r automation/unity/requirements.txt
 ```
 
@@ -75,7 +76,7 @@ python -m pip install -r automation/unity/requirements.txt
 ### 部分更新
 
 ```bash
-npm run guide:run -- --scenario automation/scenarios/web-example.yaml --only click-more-info --output artifacts/web-example --markdown docs/controls/auto-web-example.md
+npm run guide:run -- --suite automation/robot/web-example.robot --output artifacts/web-example --markdown docs/controls/auto-web-example.md
 ```
 
 ### 生成先

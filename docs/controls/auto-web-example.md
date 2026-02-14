@@ -1,8 +1,8 @@
-# Web Example Flow
+# Web-Example
 
 Scenario ID: `web-example`
 
-[操作動画](../../artifacts/web-example/video/web-example-annotated.mp4)
+[操作動画](../../artifacts/web-example/video/web-example-raw.mp4)
 
 ## 1. Open example.com
 
