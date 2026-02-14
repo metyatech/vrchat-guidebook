@@ -41,4 +41,9 @@
   <li>セーフティ設定を自分用に調整できる</li>
 </ul>
 
+## 自動生成サンプル
+
+- [Web 手順書（自動生成）](./auto-web-example)
+- [Unity Editor 手順書テンプレート（自動生成）](./auto-unity-editor-basic)
+
 > 次は `改変のやり方` に進むと、VRChat 体験を自分向けに拡張できます。

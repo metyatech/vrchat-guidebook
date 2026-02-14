@@ -1,0 +1,16 @@
+id: unity-editor-basic
+title: Unity Editor Basic Flow (Template)
+driver: command
+command: node automation/unity/mock-unity-command.mjs --output-dir {outputDir} --manifest-path {outputDir}/unity-manifest.json
+manifestPath: "{outputDir}/unity-manifest.json"
+output:
+  markdown: docs/controls/auto-unity-editor-basic.md
+steps:
+  - id: open-unity-editor
+    title: Open Unity Editor
+    description: Launch the Unity Editor window.
+    action: external
+  - id: drag-hierarchy-item
+    title: Drag item to Scene view
+    description: Drag an item from Hierarchy to Scene view.
+    action: external
