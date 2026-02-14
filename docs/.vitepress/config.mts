@@ -6,6 +6,9 @@ export default defineConfig({
   title: 'VRChat Guidebook',
   description: 'VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト',
   themeConfig: {
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: 'ホーム', link: '/' },
       { text: '操作説明', link: '/controls/' },
