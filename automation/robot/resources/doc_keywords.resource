@@ -1,9 +1,9 @@
 *** Settings ***
 Library    Collections
 Library    SeleniumLibrary
-Library    Process
 Library    Screenshot
 Library    OperatingSystem
+Library    robotframework_unity_editor.UnityEditorLibrary
 
 *** Keywords ***
 Ensure Artifact Directories
@@ -82,6 +82,31 @@ Get Element Screen Box
 
 Execute Unity Editor Flow
     Ensure Artifact Directories
-    ${manifest_path}=    Set Variable    ${OUTPUT DIR}${/}unity-manifest.json
-    ${result}=    Run Process    python    automation/unity/run-unity-editor-flow.py    --output-dir    ${OUTPUT DIR}    --manifest-path    ${manifest_path}    stdout=${OUTPUT DIR}${/}robot${/}unity.out    stderr=${OUTPUT DIR}${/}robot${/}unity.err
-    Should Be Equal As Integers    ${result.rc}    0
+    Set Unity Output Directory    ${OUTPUT DIR}
+    ${project_path}=    Set Variable    ${OUTPUT DIR}${/}unity-sample-project
+    Start Unity Editor    project_path=${project_path}
+    TRY
+        Maximize Unity Window
+        Focus Unity Window
+        Doc Desktop Step    open-unity-editor    Open Unity Editor    Launch Unity Editor and focus the menu area.    Unity Click Relative And Emit    0.07    0.05    180    48
+        Doc Desktop Step    drag-hierarchy-item    Drag item to Scene view    Perform a drag gesture inside Unity Editor.    Unity Drag Relative And Emit    0.22    0.43    0.68    0.45
+    FINALLY
+        Stop Unity Editor
+    END
+
+Unity Click Relative And Emit
+    [Arguments]    ${x_ratio}    ${y_ratio}    ${box_width}=180    ${box_height}=48
+    ${annotation}=    Click Unity Relative    ${x_ratio}    ${y_ratio}    box_width=${box_width}    box_height=${box_height}
+    Wait For Seconds    0.8
+    Emit Annotation Metadata    ${annotation}
+
+Unity Drag Relative And Emit
+    [Arguments]    ${from_x_ratio}    ${from_y_ratio}    ${to_x_ratio}    ${to_y_ratio}
+    ${annotation}=    Drag Unity Relative    ${from_x_ratio}    ${from_y_ratio}    ${to_x_ratio}    ${to_y_ratio}
+    Wait For Seconds    0.8
+    Emit Annotation Metadata    ${annotation}
+
+Emit Annotation Metadata
+    [Arguments]    ${annotation}
+    ${metadata}=    Create Dictionary    annotation=${annotation}
+    Emit Step Metadata    ${metadata}

@@ -46,10 +46,9 @@ npm run lint:contrast
 
 仕様と責務は以下の分離リポジトリに切り出しています。
 
-- `metyatech/automation-scenario-spec`: YAML 仕様とスキーマ
-- `metyatech/automation-scenario-runtime`: シナリオ実行
 - `metyatech/automation-scenario-renderer`: Markdown/画像/動画生成
 - `metyatech/automation-scenario-studio`: CLI/運用入口
+- `metyatech/robotframework-unity-editor`: Unity Editor 操作用 Robot Framework ライブラリ
 
 ### シナリオ
 
@@ -71,7 +70,6 @@ Robot + Unity 側の前提セットアップ:
 
 ```bash
 python -m pip install -r automation/robot/requirements.txt
-python -m pip install -r automation/unity/requirements.txt
 ```
 
 必要に応じて Unity 実行ファイルを固定する場合は `UNITY_EDITOR_EXE` を設定してください。
