@@ -1,4 +1,4 @@
-# Unity Editor Basic Flow (Template)
+# Unity Editor Basic Flow
 
 Scenario ID: `unity-editor-basic`
 
@@ -6,12 +6,12 @@ Scenario ID: `unity-editor-basic`
 
 ## 1. Open Unity Editor
 
-Open the Unity Editor main window.
+Launch Unity Editor and open the top menu.
 
 ![Open Unity Editor](../../artifacts/unity-editor-basic/screenshots/open-unity-editor.png)
 
 ## 2. Drag item to Scene view
 
-Drag an object from Hierarchy to Scene view.
+Perform a drag gesture inside Unity Editor.
 
 ![Drag item to Scene view](../../artifacts/unity-editor-basic/screenshots/drag-hierarchy-item.png)

@@ -47,7 +47,7 @@ npm run lint:contrast
 ### シナリオ
 
 - `automation/scenarios/web-example.yaml`: Playwright で Web 操作を実行
-- `automation/scenarios/unity-editor-basic.yaml`: command driver 経由で Unity 用フローを実行
+- `automation/scenarios/unity-editor-basic.yaml`: command driver 経由で Unity Editor 実機フローを実行
 
 ### 実行コマンド
 
@@ -56,6 +56,14 @@ npm run guide:build:web
 npm run guide:build:unity
 npm run guide:build
 ```
+
+Unity 側の前提セットアップ:
+
+```bash
+python -m pip install -r automation/unity/requirements.txt
+```
+
+必要に応じて Unity 実行ファイルを固定する場合は `UNITY_EDITOR_EXE` を設定してください。
 
 ### 部分更新
 
@@ -68,8 +76,6 @@ npm run guide:run -- --scenario automation/scenarios/web-example.yaml --only cli
 - `docs/controls/auto-web-example.md`
 - `docs/controls/auto-unity-editor-basic.md`
 - `artifacts/<scenario>/...`（画像・動画・steps.json）
-
-> `unity-editor-basic` はテンプレート実装です。実運用では `automation/scenarios/unity-editor-basic.yaml` の `command` を、Robot Framework / pywinauto などの実際の Unity Editor 操作スクリプトに置き換えてください。
 
 ## 検証
 

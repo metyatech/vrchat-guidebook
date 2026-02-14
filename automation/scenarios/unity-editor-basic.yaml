@@ -1,7 +1,7 @@
 id: unity-editor-basic
-title: Unity Editor Basic Flow (Template)
+title: Unity Editor Basic Flow
 driver: command
-command: node automation/unity/mock-unity-command.mjs --output-dir {outputDir} --manifest-path {outputDir}/unity-manifest.json
+command: python automation/unity/run-unity-editor-flow.py --output-dir {outputDir} --manifest-path {outputDir}/unity-manifest.json
 manifestPath: "{outputDir}/unity-manifest.json"
 output:
   markdown: docs/controls/auto-unity-editor-basic.md
