@@ -9,6 +9,17 @@ const MIN_BACKGROUND_CONTRAST = 1.25
 const MIN_BORDER_CONTRAST = 3
 const MIN_BOUNDARY_AREA = 600
 const MAX_BOUNDARY_ISSUES_PER_PAGE = 120
+const CRISP_BORDER_SELECTOR = [
+  '.VPHero .actions .VPButton.alt',
+  '.VPFeatures .VPFeature',
+  '.VPNavBarSearchButton',
+  '.VPNavBarSearchButton .keys',
+  '.VPSwitchAppearance',
+  '.guide-card',
+  '.meta-badge',
+  '.section-block',
+  '.VPDocFooter .pager-link'
+].join(', ')
 
 function extractPathsFromSitemap(xmlText) {
   const matches = [...xmlText.matchAll(/<loc>(.*?)<\/loc>/g)]
@@ -429,6 +440,80 @@ async function collectStateIssues(page, path, theme) {
   return issues
 }
 
+async function collectCrispBorderIssues(page, path, theme) {
+  const issues = await page.evaluate(({ selector }) => {
+    const parseColor = (colorText) => {
+      if (!colorText) {
+        return null
+      }
+      if (colorText === 'transparent') {
+        return { red: 0, green: 0, blue: 0, alpha: 0 }
+      }
+      const match = colorText.match(/rgba?\(([^)]+)\)/)
+      if (!match) {
+        return null
+      }
+      const parts = match[1].split(',').map((part) => Number(part.trim()))
+      if (parts.length < 3 || parts.some(Number.isNaN)) {
+        return null
+      }
+      return {
+        red: parts[0],
+        green: parts[1],
+        blue: parts[2],
+        alpha: parts.length >= 4 && !Number.isNaN(parts[3]) ? parts[3] : 1
+      }
+    }
+
+    const nodes = [...document.querySelectorAll(selector)].filter((node) => node instanceof HTMLElement)
+    const results = []
+    for (const node of nodes) {
+      const style = window.getComputedStyle(node)
+      if (
+        style.display === 'none' ||
+        style.visibility !== 'visible' ||
+        Number.parseFloat(style.opacity) < 0.05
+      ) {
+        continue
+      }
+
+      const borderWidths = [
+        Number.parseFloat(style.borderTopWidth) || 0,
+        Number.parseFloat(style.borderRightWidth) || 0,
+        Number.parseFloat(style.borderBottomWidth) || 0,
+        Number.parseFloat(style.borderLeftWidth) || 0
+      ]
+      const borderWidth = Math.max(...borderWidths)
+      if (borderWidth <= 0) {
+        continue
+      }
+
+      const borderColor = parseColor(style.borderTopColor)
+      const borderAlpha = borderColor ? borderColor.alpha : 0
+      const usesInsetStroke = style.boxShadow !== 'none' && /inset/.test(style.boxShadow)
+
+      if (borderAlpha <= 0.01 || usesInsetStroke) {
+        results.push({
+          tagName: node.tagName.toLowerCase(),
+          className: String(node.className || ''),
+          borderColor: style.borderTopColor,
+          boxShadow: style.boxShadow
+        })
+      }
+    }
+
+    return results
+  }, { selector: CRISP_BORDER_SELECTOR })
+
+  return issues.map((issue) => ({
+    path,
+    theme,
+    state: 'crisp-border',
+    id: 'rounded-border-rendering',
+    description: `tag=${issue.tagName} class=${issue.className} borderColor=${issue.borderColor} boxShadow=${issue.boxShadow}`
+  }))
+}
+
 function formatIssues(issues) {
   return issues
     .map((issue) => `${issue.theme} ${issue.path} [${issue.state}] ${issue.id}: ${issue.description}`)
@@ -455,8 +540,10 @@ test('color contrast is valid for light/dark and interactive states', async ({ b
           await setThemeAndOpen(page, path, theme)
           const boundaryIssues = await collectBoundaryIssues(page, path, theme)
           const issues = await collectStateIssues(page, path, theme)
+          const crispBorderIssues = await collectCrispBorderIssues(page, path, theme)
           allIssues.push(...issues)
           allIssues.push(...boundaryIssues)
+          allIssues.push(...crispBorderIssues)
         } finally {
           await page.close()
         }

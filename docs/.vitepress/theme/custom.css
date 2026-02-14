@@ -162,9 +162,9 @@
 .VPDocFooter .pager-link {
   --guide-stroke-color: var(--guide-border-strong);
   --guide-surface-shadow: 0 0 0 0 transparent;
-  border: 1px solid transparent;
+  border: 1px solid var(--guide-stroke-color);
   background-clip: padding-box;
-  box-shadow: var(--guide-surface-shadow), inset 0 0 0 1px var(--guide-stroke-color);
+  box-shadow: var(--guide-surface-shadow);
 }
 
 .VPFeatures .VPFeature {
@@ -173,17 +173,17 @@
 }
 
 .VPNavBarSearchButton {
-  border: 1px solid transparent !important;
+  border: 1px solid var(--guide-stroke-color) !important;
   background-color: var(--guide-control-bg) !important;
 }
 
 .VPNavBarSearchButton .keys {
-  border: 1px solid transparent !important;
+  border: 1px solid var(--guide-stroke-color) !important;
   background-color: var(--guide-control-key-bg) !important;
 }
 
 .VPSwitchAppearance {
-  border: 1px solid transparent !important;
+  border: 1px solid var(--guide-stroke-color) !important;
   background-color: var(--guide-control-bg) !important;
 }
 
@@ -261,7 +261,7 @@
 }
 
 .VPDocFooter .pager-link {
-  border: 1px solid transparent !important;
+  border: 1px solid var(--guide-stroke-color) !important;
   background-color: var(--guide-control-bg);
 }
 
