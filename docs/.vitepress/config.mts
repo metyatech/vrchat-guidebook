@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'ja-JP',
+  base: '/vrchat-guidebook/',
   title: 'VRChat Guidebook',
   description: 'VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト',
   themeConfig: {
