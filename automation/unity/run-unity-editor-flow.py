@@ -333,7 +333,13 @@ def main() -> int:
             window.maximize()
         except Exception:
             pass
-        window.set_focus()
+        # UIA handle can become stale right after maximize. Re-acquire and fallback to click focus.
+        window = wait_for_unity_window(unity_process.pid, 30)
+        try:
+            window.set_focus()
+        except Exception:
+            rect = window.rectangle()
+            mouse.click(coords=(rect.left + 36, rect.top + 24))
         time.sleep(1)
 
         window_rect = window.rectangle()

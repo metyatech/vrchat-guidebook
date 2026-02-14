@@ -42,7 +42,14 @@ npm run lint:contrast
 
 ## 自動手順書生成
 
-このリポジトリでは、`@metyatech/guidebook-automation-core` を使って操作手順書（Markdown + スクリーンショット + 動画）を自動生成できます。
+このリポジトリでは、`@metyatech/automation-scenario-studio` を使って操作手順書（Markdown + スクリーンショット + 動画）を自動生成できます。
+
+仕様と責務は以下の分離リポジトリに切り出しています。
+
+- `metyatech/automation-scenario-spec`: YAML 仕様とスキーマ
+- `metyatech/automation-scenario-runtime`: シナリオ実行
+- `metyatech/automation-scenario-renderer`: Markdown/画像/動画生成
+- `metyatech/automation-scenario-studio`: CLI/運用入口
 
 ### シナリオ
 

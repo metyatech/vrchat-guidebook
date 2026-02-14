@@ -12,14 +12,14 @@
     "lint:a11y": "npm run docs:build:local && node scripts/run-pa11y.cjs",
     "lint:contrast": "npm run docs:build:local && node scripts/run-contrast.cjs",
     "verify": "npm run docs:build && npm run lint:a11y && npm run lint:contrast",
-    "guide:run": "guidebook-automation run",
+    "guide:run": "automation-scenario run",
     "guide:build:web": "npm run guide:run -- --scenario automation/scenarios/web-example.yaml --output artifacts/web-example --markdown docs/controls/auto-web-example.md",
     "guide:build:unity": "npm run guide:run -- --scenario automation/scenarios/unity-editor-basic.yaml --output artifacts/unity-editor-basic --markdown docs/controls/auto-unity-editor-basic.md",
     "guide:build": "npm run guide:build:web && npm run guide:build:unity"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
-    "@metyatech/guidebook-automation-core": "github:metyatech/guidebook-automation-core#main",
+    "@metyatech/automation-scenario-studio": "github:metyatech/automation-scenario-studio#main",
     "@playwright/test": "^1.55.0",
     "cross-env": "^10.1.0",
     "pa11y-ci": "^4.0.1",
