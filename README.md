@@ -34,6 +34,12 @@ npm run lint:a11y
 
 `sitemap.xml` を基準に全ページを `pa11y-ci` で自動走査します。
 
+```bash
+npm run lint:contrast
+```
+
+`Playwright + axe-core` で `light/dark` 両モードと `default/hover/focus` のコントラストを自動検査します。
+
 ## 検証
 
 ```bash
