@@ -28,6 +28,19 @@ export default defineConfig({
           { text: 'はじめに', link: '/' },
           { text: '操作説明', link: '/controls/' },
           { text: '改変のやり方', link: '/avatar-customization/' },
+          { text: 'PhysBone: 伸びるパーツ調整', link: '/avatar-customization/physbone/' },
+          {
+            text: '伸びるパーツ調整手順',
+            link: '/avatar-customization/physbone/stretchable-parts-workflow'
+          },
+          {
+            text: 'Stretch & Squish パラメータ',
+            link: '/avatar-customization/physbone/stretch-and-squish-parameters'
+          },
+          {
+            text: 'Play Mode での伸び確認',
+            link: '/avatar-customization/physbone/playmode-stretch-test'
+          },
           { text: 'ワールドの作り方', link: '/world-creation/' }
         ]
       }
