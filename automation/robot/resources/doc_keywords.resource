@@ -86,7 +86,6 @@ Execute Unity Editor Flow
     ${project_path}=    Set Variable    ${OUTPUT DIR}${/}unity-sample-project
     Start Unity Editor    project_path=${project_path}
     TRY
-        Maximize Unity Window
         Focus Unity Window
         Doc Desktop Step    open-unity-editor    Open Unity Editor    Launch Unity Editor and focus the menu area.    Unity Click Relative And Emit    0.07    0.05    180    48
         Doc Desktop Step    drag-hierarchy-item    Drag item to Scene view    Perform a drag gesture inside Unity Editor.    Unity Drag Relative And Emit    0.22    0.43    0.68    0.45
