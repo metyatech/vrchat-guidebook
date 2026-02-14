@@ -1,7 +1,5 @@
 # 伸びるパーツ（尻尾・耳）の調整手順（PhysBone）
 
-このページは、`@UdonBeta` さんの投稿スレッド（元投稿 + 返信3段）にある手順を、実作業向けに整理したものです。
-
 ## 対象
 
 - VRChat アバターの尻尾・耳など、ボーンが連なる揺れ物
@@ -50,32 +48,3 @@
 3. `Active` のチェックを外します。
 4. Scene 上で尻尾などのボーンをつかんで引っ張り、伸び方を確認します。
 5. 望む挙動になるまで `Stretch & Squish` の値を再調整します。
-
-## スレッド対応表
-
-- 元投稿（`2022256277636944013`）: 目的提示（尻尾/耳をもっと伸びるようにする）
-- 返信1（`2022260668582490520`）: PhysBone の場所特定 + Stretch/Squish 主要パラメータ説明
-- 返信2（`2022266803221901613`）: FreeFlyCamera を使ったテスト環境構築
-- 返信3（`2022268552846156215`）: Play Mode での実際の引っ張り検証手順
-
-## 出典リンク
-
-- <https://x.com/UdonBeta/status/2022256277636944013?s=20>
-- <https://x.com/UdonBeta/status/2022260668582490520>
-- <https://x.com/UdonBeta/status/2022266803221901613>
-- <https://x.com/UdonBeta/status/2022268552846156215>
-
-## 添付画像（確認用）
-
-- 元投稿 (`2022256277636944013`)
-  - <https://pbs.twimg.com/media/HBB_Tk5aYAAB5Wh.png>
-- 返信1 (`2022260668582490520`)
-  - <https://pbs.twimg.com/media/HBCAtqLbsAAcNKI.jpg>
-  - <https://pbs.twimg.com/media/HBCDVszbwAAyYBd.jpg>
-- 返信2 (`2022266803221901613`)
-  - <https://pbs.twimg.com/media/HBCG-UFawAAVtFY.jpg>
-  - <https://pbs.twimg.com/media/HBCHRT3bAAApuiT.png>
-  - <https://pbs.twimg.com/media/HBCIlnbbwAAJRz7.png>
-- 返信3 (`2022268552846156215`)
-  - <https://pbs.twimg.com/media/HBCJq2GbsAAqPLz.jpg>
-  - <https://pbs.twimg.com/media/HBCKdLVbIAAyJib.jpg>
