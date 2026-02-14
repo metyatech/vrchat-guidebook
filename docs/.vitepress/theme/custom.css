@@ -147,29 +147,43 @@
 }
 
 .VPHero .actions .VPButton.alt {
-  border: 1px solid var(--guide-border-strong);
   background-color: var(--guide-control-bg);
   color: var(--guide-nav-link-active-color);
 }
 
+.VPHero .actions .VPButton.alt,
+.VPFeatures .VPFeature,
+.VPNavBarSearchButton,
+.VPNavBarSearchButton .keys,
+.VPSwitchAppearance,
+.guide-card,
+.meta-badge,
+.section-block,
+.VPDocFooter .pager-link {
+  --guide-stroke-color: var(--guide-border-strong);
+  --guide-surface-shadow: 0 0 0 0 transparent;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: var(--guide-surface-shadow), inset 0 0 0 1px var(--guide-stroke-color);
+}
+
 .VPFeatures .VPFeature {
-  border: 1px solid var(--guide-border-strong);
+  --guide-surface-shadow: var(--guide-feature-shadow);
   background: var(--guide-feature-bg);
-  box-shadow: var(--guide-feature-shadow);
 }
 
 .VPNavBarSearchButton {
-  border: 1px solid var(--guide-border-strong) !important;
+  border: 1px solid transparent !important;
   background-color: var(--guide-control-bg) !important;
 }
 
 .VPNavBarSearchButton .keys {
-  border: 1px solid var(--guide-border-strong) !important;
+  border: 1px solid transparent !important;
   background-color: var(--guide-control-key-bg) !important;
 }
 
 .VPSwitchAppearance {
-  border: 1px solid var(--guide-border-strong) !important;
+  border: 1px solid transparent !important;
   background-color: var(--guide-control-bg) !important;
 }
 
@@ -185,21 +199,20 @@
 }
 
 .guide-card {
+  --guide-surface-shadow: var(--guide-card-shadow);
   display: block;
-  border: 2px solid var(--guide-border-strong);
   border-radius: 14px;
   padding: 1rem;
   background: var(--guide-card-bg);
-  box-shadow: var(--guide-card-shadow);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   color: inherit;
   text-decoration: none;
 }
 
 .guide-card:hover {
+  --guide-stroke-color: var(--guide-card-hover-border);
+  --guide-surface-shadow: var(--guide-card-hover-shadow);
   transform: translateY(-3px);
-  border-color: var(--guide-card-hover-border);
-  box-shadow: var(--guide-card-hover-shadow);
 }
 
 .guide-card:focus-visible {
@@ -232,13 +245,11 @@
   border-radius: 999px;
   padding: 0.15rem 0.65rem;
   font-size: 0.78rem;
-  border: 1px solid var(--guide-border-strong);
   background: var(--guide-badge-bg);
   color: var(--guide-badge-text);
 }
 
 .section-block {
-  border: 1px solid var(--guide-border-strong);
   border-radius: 12px;
   padding: 0.95rem 1rem;
   margin: 0.9rem 0;
@@ -250,7 +261,7 @@
 }
 
 .VPDocFooter .pager-link {
-  border: 1px solid var(--guide-border-strong) !important;
+  border: 1px solid transparent !important;
   background-color: var(--guide-control-bg);
 }
 
