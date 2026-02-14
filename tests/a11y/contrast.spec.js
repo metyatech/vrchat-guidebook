@@ -3,10 +3,12 @@ const AxeBuilder = require('@axe-core/playwright').default
 
 const THEMES = ['light', 'dark']
 const INTERACTIVE_SELECTOR = '#VPContent a, #VPContent button, #VPContent [role="button"], .VPHero a'
-const BOUNDARY_SELECTOR = '.VPFeature, .guide-card, .section-block'
+const BOUNDARY_SELECTOR = 'body *'
 const MAX_ELEMENTS_PER_PAGE = 8
 const MIN_BACKGROUND_CONTRAST = 1.25
-const MIN_BORDER_CONTRAST = 1.5
+const MIN_BORDER_CONTRAST = 3
+const MIN_BOUNDARY_AREA = 600
+const MAX_BOUNDARY_ISSUES_PER_PAGE = 120
 
 function extractPathsFromSitemap(xmlText) {
   const matches = [...xmlText.matchAll(/<loc>(.*?)<\/loc>/g)]
@@ -32,8 +34,10 @@ async function runContrastCheck(page, includeSelector) {
 
 async function collectBoundaryIssues(page, path, theme) {
   const issues = await page.evaluate(
-    ({ selector, minBackgroundContrast, minBorderContrast }) => {
-      const candidates = [...document.querySelectorAll(selector)]
+    ({ selector, minBackgroundContrast, minBorderContrast, minBoundaryArea, maxBoundaryIssuesPerPage }) => {
+      const candidates = [...document.querySelectorAll(selector)].filter(
+        (node) => node instanceof HTMLElement
+      )
       const colorProbe = document.createElement('span')
 
       const parseColor = (colorText) => {
@@ -89,6 +93,45 @@ async function collectBoundaryIssues(page, path, theme) {
         return { red, green, blue, alpha }
       }
 
+      const extractColorTokens = (text) => {
+        if (!text || text === 'none') {
+          return []
+        }
+        const tokenPattern = /rgba?\([^)]*\)|#[0-9a-fA-F]{3,8}|transparent/g
+        return text.match(tokenPattern) || []
+      }
+
+      const parseColorList = (tokens) => (
+        tokens
+          .map((token) => parseColor(token))
+          .filter((color) => color && color.alpha > 0)
+      )
+
+      const averageColors = (colors) => {
+        if (!colors.length) {
+          return null
+        }
+        let weightTotal = 0
+        let redTotal = 0
+        let greenTotal = 0
+        let blueTotal = 0
+        let alphaTotal = 0
+        for (const color of colors) {
+          const weight = Math.max(color.alpha, 0.05)
+          weightTotal += weight
+          redTotal += color.red * weight
+          greenTotal += color.green * weight
+          blueTotal += color.blue * weight
+          alphaTotal += color.alpha
+        }
+        return {
+          red: redTotal / weightTotal,
+          green: greenTotal / weightTotal,
+          blue: blueTotal / weightTotal,
+          alpha: Math.min(1, alphaTotal / colors.length)
+        }
+      }
+
       const blendColor = (foreground, background) => {
         const alpha = foreground.alpha + background.alpha * (1 - foreground.alpha)
         if (alpha <= 0) {
@@ -118,9 +161,75 @@ async function collectBoundaryIssues(page, path, theme) {
         return (maxLum + 0.05) / (minLum + 0.05)
       }
 
-      const resolveEffectiveBackground = (node) => {
+      const resolveBaseColor = () => {
+        const htmlColor = parseColor(window.getComputedStyle(document.documentElement).backgroundColor)
+        if (htmlColor && htmlColor.alpha > 0) {
+          return htmlColor
+        }
+        const bodyColor = parseColor(window.getComputedStyle(document.body).backgroundColor)
+        if (bodyColor && bodyColor.alpha > 0) {
+          return bodyColor
+        }
+        if (document.documentElement.classList.contains('dark')) {
+          return { red: 9, green: 17, blue: 32, alpha: 1 }
+        }
+        return { red: 255, green: 255, blue: 255, alpha: 1 }
+      }
+
+      const resolveRepresentativeBackgroundColor = (style) => {
+        const colors = []
+        const solid = parseColor(style.backgroundColor)
+        if (solid && solid.alpha > 0) {
+          colors.push(solid)
+        }
+        const gradientColors = parseColorList(extractColorTokens(style.backgroundImage))
+        colors.push(...gradientColors)
+        return averageColors(colors)
+      }
+
+      const resolveEdgeCueColors = (style) => {
+        const edgeColors = []
+        const borderWidths = [
+          Number.parseFloat(style.borderTopWidth) || 0,
+          Number.parseFloat(style.borderRightWidth) || 0,
+          Number.parseFloat(style.borderBottomWidth) || 0,
+          Number.parseFloat(style.borderLeftWidth) || 0
+        ]
+        const maxBorderWidth = Math.max(...borderWidths)
+        if (maxBorderWidth > 0) {
+          const borderColor = parseColor(style.borderTopColor)
+          if (borderColor && borderColor.alpha > 0) {
+            edgeColors.push(borderColor)
+          }
+        }
+
+        const outlineWidth = Number.parseFloat(style.outlineWidth) || 0
+        if (outlineWidth > 0 && style.outlineStyle !== 'none') {
+          const outlineColor = parseColor(style.outlineColor)
+          if (outlineColor && outlineColor.alpha > 0) {
+            edgeColors.push(outlineColor)
+          }
+        }
+
+        const shadowColors = parseColorList(extractColorTokens(style.boxShadow))
+        edgeColors.push(...shadowColors)
+        return edgeColors
+      }
+
+      const hasRoundedCorner = (style) => {
+        const radii = [
+          style.borderTopLeftRadius,
+          style.borderTopRightRadius,
+          style.borderBottomRightRadius,
+          style.borderBottomLeftRadius
+        ]
+          .map((value) => Number.parseFloat(value) || 0)
+        return Math.max(...radii) >= 3
+      }
+
+      const resolveEffectiveBackgroundColor = (node) => {
         let current = node
-        let output = { red: 255, green: 255, blue: 255, alpha: 1 }
+        let output = resolveBaseColor()
         const chain = []
         while (current) {
           chain.unshift(current)
@@ -129,11 +238,11 @@ async function collectBoundaryIssues(page, path, theme) {
 
         for (const chainNode of chain) {
           const style = window.getComputedStyle(chainNode)
-          const parsed = parseColor(style.backgroundColor)
-          if (!parsed || parsed.alpha <= 0) {
+          const backgroundColor = parseColor(style.backgroundColor)
+          if (!backgroundColor) {
             continue
           }
-          output = blendColor(parsed, output)
+          output = blendColor(backgroundColor, output)
         }
         return output
       }
@@ -141,34 +250,91 @@ async function collectBoundaryIssues(page, path, theme) {
       const results = []
       for (const candidate of candidates) {
         const rect = candidate.getBoundingClientRect()
-        if (rect.width < 80 || rect.height < 40) {
+        if (rect.width * rect.height < minBoundaryArea) {
           continue
         }
 
         const candidateStyle = window.getComputedStyle(candidate)
+        if (
+          candidateStyle.display === 'none' ||
+          candidateStyle.visibility !== 'visible' ||
+          Number.parseFloat(candidateStyle.opacity) < 0.05
+        ) {
+          continue
+        }
+
+        const tagName = candidate.tagName.toLowerCase()
+        const isInteractive = candidate.matches('a[href], button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])')
+        const containerDisplays = new Set(['block', 'flex', 'grid', 'table', 'flow-root', 'list-item'])
+        const isContainer = containerDisplays.has(candidateStyle.display)
+        if (!isInteractive && !isContainer) {
+          continue
+        }
+
+        if (!isInteractive && candidate.closest('a[href], button, [role="button"]')) {
+          continue
+        }
+
+        if (!isInteractive && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code', 'pre', 'kbd', 'hr'].includes(tagName)) {
+          continue
+        }
+
         const parent = candidate.parentElement
         if (!parent) {
           continue
         }
 
-        const candidateBackground = resolveEffectiveBackground(candidate)
-        const parentBackground = resolveEffectiveBackground(parent)
-        const backgroundContrast = contrast(candidateBackground, parentBackground)
+        const parentBackgroundColor = resolveEffectiveBackgroundColor(parent)
+        const backgroundCueColor = resolveRepresentativeBackgroundColor(candidateStyle)
+        const edgeCueColors = resolveEdgeCueColors(candidateStyle)
+        const hasBackgroundCue = Boolean(backgroundCueColor)
+        const hasEdgeCue = edgeCueColors.length > 0
 
-        const borderWidth = Number.parseFloat(candidateStyle.borderTopWidth) || 0
-        const borderColor = parseColor(candidateStyle.borderTopColor)
-        let borderContrast = 0
-        if (borderWidth > 0 && borderColor && borderColor.alpha > 0) {
-          borderContrast = contrast(borderColor, parentBackground)
+        if (!hasBackgroundCue && !hasEdgeCue) {
+          continue
         }
 
-        if (backgroundContrast < minBackgroundContrast && borderContrast < minBorderContrast) {
+        const roundedCorner = hasRoundedCorner(candidateStyle)
+        if (!hasEdgeCue && !roundedCorner) {
+          continue
+        }
+
+        let backgroundContrast = 0
+        if (hasBackgroundCue) {
+          const candidateBackground = blendColor(backgroundCueColor, parentBackgroundColor)
+          backgroundContrast = contrast(candidateBackground, parentBackgroundColor)
+        }
+
+        let borderContrast = 0
+        if (hasEdgeCue) {
+          const contrasts = edgeCueColors.map((edgeColor) => {
+            const candidateEdge = blendColor(edgeColor, parentBackgroundColor)
+            return contrast(candidateEdge, parentBackgroundColor)
+          })
+          borderContrast = Math.max(...contrasts)
+        }
+
+        const visuallyDistinctBackground = hasBackgroundCue && backgroundContrast >= 1.05
+        const intentionallySeparated = hasEdgeCue || roundedCorner || visuallyDistinctBackground
+        if (!intentionallySeparated) {
+          continue
+        }
+
+        const passesBoundaryContrast =
+          (hasBackgroundCue && backgroundContrast >= minBackgroundContrast) ||
+          (hasEdgeCue && borderContrast >= minBorderContrast)
+
+        if (!passesBoundaryContrast) {
           const className = candidate.className || candidate.tagName.toLowerCase()
           results.push({
+            tagName: candidate.tagName.toLowerCase(),
             className: String(className),
             backgroundContrast: Number(backgroundContrast.toFixed(2)),
             borderContrast: Number(borderContrast.toFixed(2))
           })
+          if (results.length >= maxBoundaryIssuesPerPage) {
+            break
+          }
         }
       }
 
@@ -177,7 +343,9 @@ async function collectBoundaryIssues(page, path, theme) {
     {
       selector: BOUNDARY_SELECTOR,
       minBackgroundContrast: MIN_BACKGROUND_CONTRAST,
-      minBorderContrast: MIN_BORDER_CONTRAST
+      minBorderContrast: MIN_BORDER_CONTRAST,
+      minBoundaryArea: MIN_BOUNDARY_AREA,
+      maxBoundaryIssuesPerPage: MAX_BOUNDARY_ISSUES_PER_PAGE
     }
   )
 
@@ -186,7 +354,7 @@ async function collectBoundaryIssues(page, path, theme) {
     theme,
     state: 'boundary',
     id: 'container-boundary-contrast',
-    description: `class=${issue.className} bg=${issue.backgroundContrast} border=${issue.borderContrast}`
+    description: `tag=${issue.tagName} class=${issue.className} bg=${issue.backgroundContrast} border=${issue.borderContrast}`
   }))
 }
 
@@ -285,8 +453,8 @@ test('color contrast is valid for light/dark and interactive states', async ({ b
         const page = await context.newPage()
         try {
           await setThemeAndOpen(page, path, theme)
-          const issues = await collectStateIssues(page, path, theme)
           const boundaryIssues = await collectBoundaryIssues(page, path, theme)
+          const issues = await collectStateIssues(page, path, theme)
           allIssues.push(...issues)
           allIssues.push(...boundaryIssues)
         } finally {

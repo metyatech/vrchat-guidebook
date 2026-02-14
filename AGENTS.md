@@ -157,7 +157,8 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/linting-formatting-and-st
 - Do not rely on per-page/manual test maintenance; use route discovery (for example sitemap, generated route lists, or framework route manifests) so newly added pages are automatically included.
 - Validate both light and dark themes when theme switching is supported.
 - Validate at least default, hover, and focus states for interactive elements.
-- Enforce non-text boundary contrast checks for container surfaces (cards, panels, feature blocks, section blocks) against surrounding backgrounds.
+- Enforce non-text boundary contrast checks across all visible UI elements that present boundaries (including interactive controls and container-like elements), not only predefined component classes.
+- Do not hardcode a narrow selector allowlist for boundary checks; use broad DOM discovery with only minimal technical exclusions (for example hidden/zero-size/non-rendered nodes).
 - Fail CI on violations; do not silently ignore design regressions.
 - If temporary exclusions are unavoidable, keep them narrowly scoped, documented with rationale, and remove them promptly.
 

@@ -42,6 +42,10 @@
   --guide-brand-button-bg: #006ba8;
   --guide-brand-button-bg-hover: #005b90;
   --guide-brand-button-text: #f6fbff;
+  --guide-border-strong: #123454;
+  --guide-border-strong-soft: #35689f;
+  --guide-control-bg: #e8f0ff;
+  --guide-control-key-bg: #d8e7ff;
 }
 
 .dark {
@@ -85,6 +89,10 @@
   --guide-brand-button-bg: #0070ad;
   --guide-brand-button-bg-hover: #005f92;
   --guide-brand-button-text: #f5fbff;
+  --guide-border-strong: #b7ebff;
+  --guide-border-strong-soft: #8fd8fb;
+  --guide-control-bg: #11233f;
+  --guide-control-key-bg: #0e1c33;
 }
 
 .Layout {
@@ -138,10 +146,35 @@
   color: var(--guide-brand-button-text);
 }
 
+.VPHero .actions .VPButton.alt {
+  border: 1px solid var(--guide-border-strong);
+  background-color: var(--guide-control-bg);
+  color: var(--guide-nav-link-active-color);
+}
+
 .VPFeatures .VPFeature {
-  border: 1px solid var(--guide-feature-border);
+  border: 1px solid var(--guide-border-strong);
   background: var(--guide-feature-bg);
   box-shadow: var(--guide-feature-shadow);
+}
+
+.VPNavBarSearchButton {
+  border: 1px solid var(--guide-border-strong) !important;
+  background-color: var(--guide-control-bg) !important;
+}
+
+.VPNavBarSearchButton .keys {
+  border: 1px solid var(--guide-border-strong) !important;
+  background-color: var(--guide-control-key-bg) !important;
+}
+
+.VPSwitchAppearance {
+  border: 1px solid var(--guide-border-strong) !important;
+  background-color: var(--guide-control-bg) !important;
+}
+
+.VPSidebar {
+  border-right: 1px solid var(--guide-border-strong);
 }
 
 .guide-grid {
@@ -153,7 +186,7 @@
 
 .guide-card {
   display: block;
-  border: 1px solid var(--guide-card-border);
+  border: 2px solid var(--guide-border-strong);
   border-radius: 14px;
   padding: 1rem;
   background: var(--guide-card-bg);
@@ -199,17 +232,31 @@
   border-radius: 999px;
   padding: 0.15rem 0.65rem;
   font-size: 0.78rem;
-  border: 1px solid var(--guide-badge-border);
+  border: 1px solid var(--guide-border-strong);
   background: var(--guide-badge-bg);
   color: var(--guide-badge-text);
 }
 
 .section-block {
-  border: 1px solid var(--guide-section-border);
+  border: 1px solid var(--guide-border-strong);
   border-radius: 12px;
   padding: 0.95rem 1rem;
   margin: 0.9rem 0;
   background: var(--guide-section-bg);
+}
+
+.VPDocFooter .prev-next {
+  border-top: 1px solid var(--guide-border-strong);
+}
+
+.VPDocFooter .pager-link {
+  border: 1px solid var(--guide-border-strong) !important;
+  background-color: var(--guide-control-bg);
+}
+
+.VPDocFooter .pager-link .title,
+.VPDocFooter .pager-link .desc {
+  color: var(--guide-nav-link-active-color) !important;
 }
 
 .section-block h2,
