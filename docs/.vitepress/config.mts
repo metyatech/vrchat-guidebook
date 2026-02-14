@@ -1,8 +1,13 @@
 import { defineConfig } from 'vitepress'
 
+const siteUrl = process.env.SITE_URL || 'https://metyatech.github.io'
+
 export default defineConfig({
   lang: 'ja-JP',
   base: '/vrchat-guidebook/',
+  sitemap: {
+    hostname: siteUrl
+  },
   title: 'VRChat Guidebook',
   description: 'VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト',
   themeConfig: {

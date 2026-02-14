@@ -26,6 +26,20 @@ npm run docs:dev
 npm run docs:build
 ```
 
+## アクセシビリティチェック
+
+```bash
+npm run lint:a11y
+```
+
+`sitemap.xml` を基準に全ページを `pa11y-ci` で自動走査します。
+
+## 検証
+
+```bash
+npm run verify
+```
+
 ## プレビュー
 
 ```bash

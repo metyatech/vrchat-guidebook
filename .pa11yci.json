@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 60000,
+    "hideElements": ".VPSwitchAppearance",
+    "chromeLaunchConfig": {
+      "args": [
+        "--no-sandbox",
+        "--disable-dev-shm-usage"
+      ]
+    }
+  }
+}
