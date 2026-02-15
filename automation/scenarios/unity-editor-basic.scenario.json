@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "scenario_id": "unity-editor-basic",
+  "name": "Unity Editor Basic Flow",
+  "target": "unity",
+  "metadata": {
+    "target_window_hint": "Unity",
+    "unity_execution_mode": "launch",
+    "unity_project_path": "./automation/unity-sample-project"
+  },
+  "steps": [
+    {
+      "id": "open-unity-editor",
+      "title": "Open Unity Editor",
+      "description": "Launch Unity Editor and focus the menu area.",
+      "action": "click",
+      "params": {
+        "x_ratio": 0.07,
+        "y_ratio": 0.05,
+        "box_width": 180,
+        "box_height": 48,
+        "wait_seconds": 0.8
+      }
+    },
+    {
+      "id": "drag-hierarchy-item",
+      "title": "Drag item to Scene view",
+      "description": "Perform a drag gesture inside Unity Editor.",
+      "action": "drag",
+      "params": {
+        "from_x_ratio": 0.22,
+        "from_y_ratio": 0.43,
+        "to_x_ratio": 0.68,
+        "to_y_ratio": 0.45,
+        "wait_seconds": 0.8
+      }
+    }
+  ]
+}

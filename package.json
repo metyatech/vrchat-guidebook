@@ -12,14 +12,14 @@
     "lint:a11y": "npm run docs:build:local && node scripts/run-pa11y.cjs",
     "lint:contrast": "npm run docs:build:local && node scripts/run-contrast.cjs",
     "verify": "npm run docs:build && npm run lint:a11y && npm run lint:contrast",
-    "guide:run": "automation-scenario run-robot",
-    "guide:build:web": "npm run guide:run -- --suite automation/robot/web-example.robot --output artifacts/web-example --markdown docs/controls/auto-web-example.md",
-    "guide:build:unity": "npm run guide:run -- --suite automation/robot/unity-editor-basic.robot --output artifacts/unity-editor-basic --markdown docs/controls/auto-unity-editor-basic.md",
+    "guide:run": "automation-scenario run-scenario",
+    "guide:build:web": "npm run guide:run -- --scenario automation/scenarios/web-example.scenario.json --output artifacts/web-example --markdown docs/controls/auto-web-example.md",
+    "guide:build:unity": "npm run guide:run -- --scenario automation/scenarios/unity-editor-basic.scenario.json --output artifacts/unity-editor-basic --markdown docs/controls/auto-unity-editor-basic.md",
     "guide:build": "npm run guide:build:web && npm run guide:build:unity"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
-    "@metyatech/automation-scenario-studio": "github:metyatech/automation-scenario-studio#main",
+    "@metyatech/automation-scenario-studio": "git+https://github.com/metyatech/automation-scenario-studio.git#a5bc720882ad42a2ab96b554939a225346caf290",
     "@playwright/test": "^1.55.0",
     "cross-env": "^10.1.0",
     "pa11y-ci": "^4.0.1",

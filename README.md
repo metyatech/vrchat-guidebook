@@ -48,15 +48,15 @@ npm run lint:contrast
 
 - `metyatech/automation-scenario-renderer`: Markdown/画像/動画生成
 - `metyatech/automation-scenario-studio`: CLI/運用入口
+- `metyatech/automation-scenario-spec`: シナリオJSON仕様
 - `metyatech/robotframework-unity-editor`: Unity Editor 操作用 Robot Framework ライブラリ
 
-### シナリオ
+### シナリオ（共通仕様JSON）
 
-- `automation/robot/web-example.robot`: Robot Framework で Web 操作を実行
-- `automation/robot/unity-editor-basic.robot`: Robot Framework から Unity Editor 実機フローを実行
+- `automation/scenarios/web-example.scenario.json`: Web 操作
+- `automation/scenarios/unity-editor-basic.scenario.json`: Unity Editor 操作
 
-注釈は Robot キーワード側で共通化しています（`automation/robot/resources/doc_keywords.resource`）。
-現状は `click` と `dragDrop` を扱い、将来的にテキストラベル等を追加できる構成です。
+`.scenario.json` から Robot Suite は自動生成されます。注釈は `DOCMETA` 経由で共通化しており、現状は `click` と `dragDrop` を扱います。
 
 ### 実行コマンド
 
@@ -69,7 +69,7 @@ npm run guide:build
 Robot + Unity 側の前提セットアップ:
 
 ```bash
-python -m pip install -r automation/robot/requirements.txt
+python -m pip install -r automation/requirements.txt
 ```
 
 必要に応じて Unity 実行ファイルを固定する場合は `UNITY_EDITOR_EXE` を設定してください。
@@ -77,7 +77,7 @@ python -m pip install -r automation/robot/requirements.txt
 ### 部分更新
 
 ```bash
-npm run guide:run -- --suite automation/robot/web-example.robot --output artifacts/web-example --markdown docs/controls/auto-web-example.md
+npm run guide:run -- --scenario automation/scenarios/web-example.scenario.json --output artifacts/web-example --markdown docs/controls/auto-web-example.md
 ```
 
 ### 生成先

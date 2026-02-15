@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "scenario_id": "web-example",
+  "name": "Web Example Flow",
+  "target": "web",
+  "metadata": {
+    "start_url": "https://example.com",
+    "browser": "chrome"
+  },
+  "steps": [
+    {
+      "id": "open-example",
+      "title": "Open example.com",
+      "description": "Open the example website top page.",
+      "action": "open_url",
+      "params": {
+        "url": "https://example.com"
+      }
+    },
+    {
+      "id": "click-more-info",
+      "title": "Click More information",
+      "description": "Click the first link and open destination page.",
+      "action": "click",
+      "params": {
+        "locator": "css:a"
+      }
+    }
+  ]
+}
