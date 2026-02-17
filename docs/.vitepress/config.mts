@@ -27,6 +27,7 @@ export default defineConfig({
         items: [
           { text: 'はじめに', link: '/' },
           { text: '操作説明', link: '/controls/' },
+          { text: 'ポータブル自動生成', link: '/controls/automation-portable' },
           { text: '改変のやり方', link: '/avatar-customization/' },
           { text: 'PhysBone: 伸びるパーツ調整', link: '/avatar-customization/physbone/' },
           {

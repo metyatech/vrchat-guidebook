@@ -40,51 +40,85 @@ npm run lint:contrast
 
 `Playwright + axe-core` で `light/dark` 両モードと `default/hover/focus` のコントラストを自動検査します。
 
-## 自動手順書生成
+## Portable automation for guide generation
 
-このリポジトリでは、`@metyatech/automation-scenario-studio` を使って操作手順書（Markdown + スクリーンショット + 動画）を自動生成できます。
+This repository uses a profile-driven portable automation layer on top of `@metyatech/automation-scenario-studio`.
 
-仕様と責務は以下の分離リポジトリに切り出しています。
+The portability model separates concerns into four data types:
 
-- `metyatech/automation-scenario-renderer`: Markdown/画像/動画生成
-- `metyatech/automation-scenario-studio`: CLI/運用入口
-- `metyatech/automation-scenario-spec`: シナリオJSON仕様
-- `metyatech/robotframework-unity-editor`: Unity Editor 操作用 Robot Framework ライブラリ
+- `automation/portable/profiles/*.profile.json`: avatar/project-specific state (paths, versions, selectors, anchors)
+- `automation/portable/blueprints/*.blueprint.json`: reusable operation logic without avatar-specific values
+- `automation/portable/matrices/*.matrix.json`: execution mapping for profile x blueprint combinations
+- `automation/portable/capabilities/*.json`: version-aware capability rules for conditional steps
 
-### シナリオ（共通仕様JSON）
+The compiler resolves templates and conditions into deterministic generated scenarios under `automation/scenarios/generated/`.
+Those scenarios are then executed to regenerate markdown, screenshots, videos, and `steps.json`.
 
-- `automation/scenarios/web-example.scenario.json`: Web 操作
-- `automation/scenarios/unity-editor-basic.scenario.json`: Unity Editor 操作
-
-`.scenario.json` から Robot Suite は自動生成されます。注釈は `DOCMETA` 経由で共通化しており、現状は `click` と `dragDrop` を扱います。
-
-### 実行コマンド
+### Portable commands
 
 ```bash
+npm run guide:portable:compile
+npm run guide:portable:run
+npm run guide:portable:run:dry
 npm run guide:build:web
 npm run guide:build:unity
 npm run guide:build
 ```
 
-Robot + Unity 側の前提セットアップ:
+Prerequisites for Robot + Unity automation:
 
 ```bash
 python -m pip install -r automation/requirements.txt
 ```
 
-必要に応じて Unity 実行ファイルを固定する場合は `UNITY_EDITOR_EXE` を設定してください。
+If needed, pin Unity executable path via `UNITY_EDITOR_EXE`.
 
-### 部分更新
+### End-to-end example
 
 ```bash
-npm run guide:run -- --scenario automation/scenarios/web-example.scenario.json --output artifacts/web-example --markdown docs/controls/auto-web-example.md
+node automation/portable/cli.cjs run \
+  --matrix automation/portable/matrices/default.matrix.json \
+  --profiles-dir automation/portable/profiles \
+  --blueprints-dir automation/portable/blueprints \
+  --capabilities automation/portable/capabilities/default.capabilities.json \
+  --generated-scenarios automation/scenarios/generated \
+  --manifest artifacts/portable/compile-manifest.json \
+  --job-id unity-editor-basic \
+  --record-video true
 ```
 
-### 生成先
+### CLI reference (`automation/portable/cli.cjs`)
+
+Command: `compile`
+
+- `--matrix` (required): matrix JSON path
+- `--profiles-dir` (required): profile directory path
+- `--blueprints-dir` (required): blueprint directory path
+- `--capabilities` (optional): capability rules JSON path
+- `--generated-scenarios` (optional): generated scenario output directory
+- `--manifest` (optional): compile manifest output path
+- `--job-id` (optional): compile only one matrix job
+- `--profile-id` (optional): compile only jobs with the profile id
+
+Command: `run`
+
+- All `compile` parameters
+- `--dry-run` (optional): `true` or `false` (default: `false`)
+- `--record-video` (optional): `true` or `false` (default: `true`)
+
+Command: `scaffold-profile`
+
+- `--profile-id` (required): output profile id
+- `--name` (required): human-readable profile name
+- `--target` (required): `unity` or `web`
+- `--output` (required): output file path
+
+### Outputs
 
 - `docs/controls/auto-web-example.md`
 - `docs/controls/auto-unity-editor-basic.md`
-- `artifacts/<scenario>/...`（画像・動画・steps.json）
+- `artifacts/<scenario>/...` (images, videos, `steps.json`)
+- `artifacts/portable/compile-manifest.json`
 
 ## 検証
 

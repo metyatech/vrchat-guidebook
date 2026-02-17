@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "blueprint_id": "unity-avatar-core",
+  "name": "Unity Editor Basic Flow",
+  "target": "unity",
+  "metadata_template": {
+    "target_window_hint": "{{profile.unity.window_hint}}",
+    "unity_execution_mode": "{{profile.unity.execution_mode}}",
+    "unity_project_path": "{{profile.unity.project_path}}"
+  },
+  "steps": [
+    {
+      "id": "open-unity-editor",
+      "title": "Open Unity Editor",
+      "description": "Focus menu area to ensure Unity interaction context.",
+      "action": "click",
+      "params_template": {
+        "x_ratio": {
+          "$ref": "profile.anchors.menu_focus.x_ratio"
+        },
+        "y_ratio": {
+          "$ref": "profile.anchors.menu_focus.y_ratio"
+        },
+        "box_width": {
+          "$ref": "profile.anchors.menu_focus.box_width"
+        },
+        "box_height": {
+          "$ref": "profile.anchors.menu_focus.box_height"
+        },
+        "wait_seconds": 0.8
+      }
+    },
+    {
+      "id": "open-sdk-control-panel",
+      "title": "Open VRChat SDK panel",
+      "description": "Open VRChat SDK control panel for supported SDK versions.",
+      "action": "menu",
+      "when": {
+        "capability": "supports_control_panel"
+      },
+      "params_template": {
+        "menu_path": "{{profile.unity.menu_paths.control_panel}}"
+      }
+    },
+    {
+      "id": "drag-hierarchy-item",
+      "title": "Drag item to Scene view",
+      "description": "Perform a drag gesture inside Unity Editor.",
+      "action": "drag",
+      "params_template": {
+        "from_x_ratio": {
+          "$ref": "profile.anchors.drag_from.x_ratio"
+        },
+        "from_y_ratio": {
+          "$ref": "profile.anchors.drag_from.y_ratio"
+        },
+        "to_x_ratio": {
+          "$ref": "profile.anchors.drag_to.x_ratio"
+        },
+        "to_y_ratio": {
+          "$ref": "profile.anchors.drag_to.y_ratio"
+        },
+        "wait_seconds": 0.8
+      }
+    }
+  ]
+}

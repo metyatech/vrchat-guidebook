@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "matrix_id": "default",
+  "jobs": [
+    {
+      "job_id": "web-example",
+      "profile_id": "web-default",
+      "blueprint_id": "web-basic",
+      "scenario_id_template": "web-example",
+      "scenario_name_template": "Web Example Flow",
+      "scenario_path_template": "automation/scenarios/generated/web-example.scenario.json",
+      "output_dir_template": "artifacts/web-example",
+      "markdown_path_template": "docs/controls/auto-web-example.md"
+    },
+    {
+      "job_id": "unity-editor-basic",
+      "profile_id": "unity-default",
+      "blueprint_id": "unity-avatar-core",
+      "scenario_id_template": "unity-editor-basic",
+      "scenario_name_template": "Unity Editor Basic Flow",
+      "scenario_path_template": "automation/scenarios/generated/unity-editor-basic.scenario.json",
+      "output_dir_template": "artifacts/unity-editor-basic",
+      "markdown_path_template": "docs/controls/auto-unity-editor-basic.md"
+    }
+  ]
+}

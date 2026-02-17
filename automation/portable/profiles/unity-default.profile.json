@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "profile_id": "unity-default",
+  "name": "Unity Default Profile",
+  "target": "unity",
+  "versions": {
+    "unity": "2022.3.22f1",
+    "vrchat_sdk": "3.7.0"
+  },
+  "capabilities": {},
+  "unity": {
+    "execution_mode": "launch",
+    "project_path": "./automation/unity-sample-project",
+    "window_hint": "Unity",
+    "menu_paths": {
+      "control_panel": "VRChat SDK/Show Control Panel"
+    }
+  },
+  "anchors": {
+    "menu_focus": {
+      "x_ratio": 0.07,
+      "y_ratio": 0.05,
+      "box_width": 180,
+      "box_height": 48
+    },
+    "drag_from": {
+      "x_ratio": 0.22,
+      "y_ratio": 0.43
+    },
+    "drag_to": {
+      "x_ratio": 0.68,
+      "y_ratio": 0.45
+    }
+  },
+  "variables": {}
+}

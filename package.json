@@ -9,13 +9,17 @@
     "docs:build:local": "cross-env SITE_URL=http://127.0.0.1:4174 SITE_BASE=/ vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:preview:host": "vitepress preview docs --host 127.0.0.1 --port 4174",
+    "test:automation": "node --test tests/automation/*.test.cjs",
     "lint:a11y": "npm run docs:build:local && node scripts/run-pa11y.cjs",
     "lint:contrast": "npm run docs:build:local && node scripts/run-contrast.cjs",
-    "verify": "npm run docs:build && npm run lint:a11y && npm run lint:contrast",
+    "verify": "npm run test:automation && npm run docs:build && npm run lint:a11y && npm run lint:contrast",
     "guide:run": "automation-scenario run-scenario",
-    "guide:build:web": "npm run guide:run -- --scenario automation/scenarios/web-example.scenario.json --output artifacts/web-example --markdown docs/controls/auto-web-example.md",
-    "guide:build:unity": "npm run guide:run -- --scenario automation/scenarios/unity-editor-basic.scenario.json --output artifacts/unity-editor-basic --markdown docs/controls/auto-unity-editor-basic.md",
-    "guide:build": "npm run guide:build:web && npm run guide:build:unity"
+    "guide:portable:compile": "node automation/portable/cli.cjs compile --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json",
+    "guide:portable:run": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json",
+    "guide:portable:run:dry": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --dry-run true",
+    "guide:build:web": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id web-example",
+    "guide:build:unity": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id unity-editor-basic",
+    "guide:build": "npm run guide:portable:run"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
@@ -28,6 +32,7 @@
     "vitepress": "^2.0.0-alpha.12"
   },
   "dependencies": {
-    "medium-zoom": "^1.1.0"
+    "medium-zoom": "^1.1.0",
+    "semver": "^7.7.4"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "blueprint_id": "web-basic",
+  "name": "Web Example Flow",
+  "target": "web",
+  "metadata_template": {
+    "start_url": "{{profile.web.start_url}}",
+    "browser": "{{profile.web.browser}}"
+  },
+  "steps": [
+    {
+      "id": "open-example",
+      "title": "Open example.com",
+      "description": "Open the example website top page.",
+      "action": "open_url",
+      "params_template": {
+        "url": "{{profile.web.start_url}}"
+      }
+    },
+    {
+      "id": "click-more-info",
+      "title": "Click More information",
+      "description": "Click the first link and open destination page.",
+      "action": "click",
+      "params_template": {
+        "locator": "{{profile.selectors.primary_link}}"
+      }
+    }
+  ]
+}

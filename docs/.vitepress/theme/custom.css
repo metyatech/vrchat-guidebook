@@ -46,6 +46,7 @@
   --guide-border-strong-soft: #35689f;
   --guide-control-bg: #e8f0ff;
   --guide-control-key-bg: #d8e7ff;
+  --guide-code-border: #315e97;
 }
 
 .dark {
@@ -93,6 +94,7 @@
   --guide-border-strong-soft: #8fd8fb;
   --guide-control-bg: #11233f;
   --guide-control-key-bg: #0e1c33;
+  --guide-code-border: #8cc9ff;
 }
 
 .Layout {
@@ -268,6 +270,10 @@
 .VPDocFooter .pager-link .title,
 .VPDocFooter .pager-link .desc {
   color: var(--guide-nav-link-active-color) !important;
+}
+
+.vp-doc div[class*='language-'] {
+  border: 1px solid var(--guide-code-border) !important;
 }
 
 .section-block h2,

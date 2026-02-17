@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0.0",
+  "rules": [
+    {
+      "capability": "supports_control_panel",
+      "when": {
+        "all": [
+          {
+            "equals": {
+              "path": "profile.target",
+              "value": "unity"
+            }
+          },
+          {
+            "version_gte": {
+              "path": "profile.versions.vrchat_sdk",
+              "value": "3.6.0"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "capability": "supports_legacy_sdk_panel",
+      "when": {
+        "all": [
+          {
+            "equals": {
+              "path": "profile.target",
+              "value": "unity"
+            }
+          },
+          {
+            "version_lt": {
+              "path": "profile.versions.vrchat_sdk",
+              "value": "3.6.0"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
