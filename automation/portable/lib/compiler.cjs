@@ -94,6 +94,46 @@ function isRecord(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
+function toStringList(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value
+    .map((item) => (typeof item === "string" ? item.trim() : ""))
+    .filter((item) => item !== "");
+}
+
+function buildWebTargetFromLocator(locator, stepId) {
+  const normalized = typeof locator === "string" ? locator.trim() : "";
+  if (normalized === "") {
+    throw new Error(`step "${stepId}" requires params.locator as non-empty string.`);
+  }
+
+  if (normalized.startsWith("css:")) {
+    return {
+      strategy: "web",
+      web: {
+        css: normalized.slice(4),
+      },
+    };
+  }
+  if (normalized.startsWith("xpath:")) {
+    return {
+      strategy: "web",
+      web: {
+        xpath: normalized.slice(6),
+      },
+    };
+  }
+
+  return {
+    strategy: "web",
+    web: {
+      css: normalized,
+    },
+  };
+}
+
 function readRequiredString(params, key, stepId) {
   const value = params[key];
   if (typeof value !== "string" || value.trim() === "") {
@@ -163,6 +203,7 @@ function compileLegacyStep(step, params, context) {
       ? interpolateString(step.description, context)
       : undefined;
   const action = normalizeLegacyAction(step.action);
+  const scenarioTarget = context.blueprint && context.blueprint.target;
   const timing = buildTiming(params);
 
   const compiled = {
@@ -194,6 +235,10 @@ function compileLegacyStep(step, params, context) {
   }
 
   if (action === "click" || action === "double_click" || action === "right_click") {
+    if (scenarioTarget === "web") {
+      compiled.target = buildWebTargetFromLocator(params.locator, id);
+      return compiled;
+    }
     compiled.target = readCoordinateTarget(params, "x_ratio", "y_ratio", id);
     const input = pickBoxSizeInput(params);
     if (input) {
@@ -211,18 +256,41 @@ function compileLegacyStep(step, params, context) {
   }
 
   if (action === "open_menu") {
-    compiled.input = {
-      menu_path: readRequiredString(params, "menu_path", id),
-    };
+    const menuPathCandidates = toStringList(params.menu_path_candidates);
+    if (menuPathCandidates.length > 0) {
+      compiled.input = {
+        menu_path: menuPathCandidates[0],
+        menu_path_candidates: menuPathCandidates,
+      };
+      return compiled;
+    }
+
+    compiled.input = { menu_path: readRequiredString(params, "menu_path", id) };
     return compiled;
   }
 
   if (action === "select_hierarchy") {
+    const hierarchyCandidates = toStringList(params.hierarchy_paths);
+    if (hierarchyCandidates.length > 0) {
+      const [firstPath, ...fallbackPaths] = hierarchyCandidates;
+      compiled.target = {
+        strategy: "unity_hierarchy",
+        unity_hierarchy: {
+          path: firstPath,
+        },
+        fallbacks: fallbackPaths.map((candidatePath) => ({
+          strategy: "unity_hierarchy",
+          unity_hierarchy: {
+            path: candidatePath,
+          },
+        })),
+      };
+      return compiled;
+    }
+
     compiled.target = {
       strategy: "unity_hierarchy",
-      unity_hierarchy: {
-        path: readRequiredString(params, "hierarchy_path", id),
-      },
+      unity_hierarchy: { path: readRequiredString(params, "hierarchy_path", id) },
     };
     return compiled;
   }

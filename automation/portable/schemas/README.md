@@ -51,6 +51,7 @@ Template features:
 
 Compiled scenario output is `automation-scenario` schema `2.0.0`.
 Legacy compact step actions are translated into v2 action steps (for example `drag -> drag_drop`, `menu -> open_menu`, `wait -> wait_for`).
+Legacy compact params also support fallback arrays that compile into portable runtime selectors (for example `menu_path_candidates`, `hierarchy_paths`).
 
 ## Matrix (`*.matrix.json`)
 

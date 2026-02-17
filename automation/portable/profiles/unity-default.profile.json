@@ -13,7 +13,12 @@
     "project_path": "./automation/unity-sample-project",
     "window_hint": "Unity",
     "menu_paths": {
-      "control_panel": "VRChat SDK/Show Control Panel"
+      "control_panel": "VRChat SDK/Show Control Panel",
+      "control_panel_candidates": [
+        "VRChat SDK/Show Control Panel",
+        "VRChat SDK/Utilities/Show Control Panel",
+        "VRChat SDK/Utilities/Control Panel"
+      ]
     }
   },
   "anchors": {
@@ -32,5 +37,13 @@
       "y_ratio": 0.45
     }
   },
-  "variables": {}
+  "variables": {
+    "hierarchy": {
+      "avatar_root_candidates": [
+        "AvatarRoot",
+        "Body/AvatarRoot",
+        "Armature/AvatarRoot"
+      ]
+    }
+  }
 }

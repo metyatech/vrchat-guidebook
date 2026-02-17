@@ -10,6 +10,17 @@
   },
   "steps": [
     {
+      "id": "select-avatar-root",
+      "title": "Select avatar root in Hierarchy",
+      "description": "Try common hierarchy roots and select the first matching object.",
+      "action": "select_hierarchy",
+      "params_template": {
+        "hierarchy_paths": {
+          "$ref": "profile.variables.hierarchy.avatar_root_candidates"
+        }
+      }
+    },
+    {
       "id": "open-unity-editor",
       "title": "Open Unity Editor",
       "description": "Focus menu area to ensure Unity interaction context.",
@@ -39,7 +50,10 @@
         "capability": "supports_control_panel"
       },
       "params_template": {
-        "menu_path": "{{profile.unity.menu_paths.control_panel}}"
+        "menu_path": "{{profile.unity.menu_paths.control_panel}}",
+        "menu_path_candidates": {
+          "$ref": "profile.unity.menu_paths.control_panel_candidates"
+        }
       }
     },
     {

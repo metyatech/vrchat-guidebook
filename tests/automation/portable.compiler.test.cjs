@@ -290,3 +290,92 @@ test("compileMatrix supports step_template for v2 control steps", () => {
   assert.deepEqual(step.items_expression, ["Tail", "Ear_L"]);
   assert.equal(step.steps[0].input.menu_path, "Tools/${part}");
 });
+
+test("compileMatrix maps legacy candidates to runtime fallback selectors", () => {
+  const profile = {
+    schema_version: "1.0.0",
+    profile_id: "portable",
+    name: "Portable",
+    target: "unity",
+    unity: {
+      execution_mode: "attach",
+      project_path: "./projects/portable",
+      window_hint: "Unity",
+    },
+    variables: {
+      hierarchy: {
+        avatar_root_candidates: [
+          "AvatarRoot",
+          "Body/AvatarRoot",
+          "Armature/AvatarRoot",
+        ],
+      },
+    },
+  };
+
+  const blueprint = {
+    schema_version: "1.0.0",
+    blueprint_id: "unity-fallbacks",
+    name: "Unity Fallbacks",
+    target: "unity",
+    metadata_template: {},
+    steps: [
+      {
+        id: "open-control-panel",
+        title: "Open Control Panel",
+        action: "menu",
+        params_template: {
+          menu_path_candidates: [
+            "VRChat SDK/Show Control Panel",
+            "VRChat SDK/Utilities/Show Control Panel",
+          ],
+        },
+      },
+      {
+        id: "select-avatar-root",
+        title: "Select Avatar Root",
+        action: "select_hierarchy",
+        params_template: {
+          hierarchy_paths: {
+            $ref: "profile.variables.hierarchy.avatar_root_candidates",
+          },
+        },
+      },
+    ],
+  };
+
+  const matrix = {
+    schema_version: "1.0.0",
+    matrix_id: "default",
+    jobs: [
+      {
+        job_id: "fallback-job",
+        profile_id: "portable",
+        blueprint_id: "unity-fallbacks",
+      },
+    ],
+  };
+
+  const compiled = compileMatrix({
+    matrix,
+    profilesById: { portable: profile },
+    blueprintsById: { "unity-fallbacks": blueprint },
+    capabilityRules: { schema_version: "1.0.0", rules: [] },
+  });
+
+  const scenarioSteps = compiled.jobs[0].scenario.steps;
+  assert.equal(scenarioSteps[0].action, "open_menu");
+  assert.equal(scenarioSteps[0].input.menu_path, "VRChat SDK/Show Control Panel");
+  assert.deepEqual(scenarioSteps[0].input.menu_path_candidates, [
+    "VRChat SDK/Show Control Panel",
+    "VRChat SDK/Utilities/Show Control Panel",
+  ]);
+
+  assert.equal(scenarioSteps[1].action, "select_hierarchy");
+  assert.equal(scenarioSteps[1].target.unity_hierarchy.path, "AvatarRoot");
+  assert.equal(scenarioSteps[1].target.fallbacks.length, 2);
+  assert.equal(
+    scenarioSteps[1].target.fallbacks[0].unity_hierarchy.path,
+    "Body/AvatarRoot"
+  );
+});
