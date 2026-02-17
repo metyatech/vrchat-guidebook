@@ -40,14 +40,17 @@ Required fields:
 Each step supports:
 
 - `id`, `title`, `description`
-- `action`
-- `params_template`
+- `action` + `params_template` (legacy compact form)
+- `step_template` (full `automation-scenario` v2 step object, including `kind: action|group|control`)
 - `when` (optional condition)
 
 Template features:
 
 - String interpolation: `{{profile.unity.project_path}}`
 - Structured reference: `{ "$ref": "profile.anchors.main_button.x_ratio" }`
+
+Compiled scenario output is `automation-scenario` schema `2.0.0`.
+Legacy compact step actions are translated into v2 action steps (for example `drag -> drag_drop`, `menu -> open_menu`, `wait -> wait_for`).
 
 ## Matrix (`*.matrix.json`)
 

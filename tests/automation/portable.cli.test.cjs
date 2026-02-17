@@ -164,8 +164,10 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
     const scenarioFile = path.join(generatedDir, "akane-unity.scenario.json");
     const scenarioRaw = await fs.readFile(scenarioFile, "utf8");
     const scenario = JSON.parse(scenarioRaw);
+    assert.equal(scenario.schema_version, "2.0.0");
     assert.equal(scenario.scenario_id, "unity-akane-pc");
     assert.equal(scenario.steps.length, 1);
+    assert.equal(scenario.steps[0].kind, "action");
 
     const manifestRaw = await fs.readFile(manifestPath, "utf8");
     const manifest = JSON.parse(manifestRaw);
@@ -362,5 +364,8 @@ test("compileFromFiles supports job filtering", async () => {
     assert.equal(result.jobs[0].job_id, "unity-job");
     const files = await fs.readdir(generatedDir);
     assert.deepEqual(files, ["unity.scenario.json"]);
+    const raw = await fs.readFile(path.join(generatedDir, "unity.scenario.json"), "utf8");
+    const scenario = JSON.parse(raw);
+    assert.equal(scenario.schema_version, "2.0.0");
   });
 });

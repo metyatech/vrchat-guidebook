@@ -75,3 +75,28 @@ test("validateMatrix requires at least one job", () => {
     /must contain at least one job/i
   );
 });
+
+test("validateBlueprint accepts v2 step_template step", () => {
+  const blueprint = {
+    schema_version: "1.0.0",
+    blueprint_id: "unity-v2-template",
+    name: "Unity V2 Template",
+    target: "unity",
+    metadata_template: {},
+    steps: [
+      {
+        id: "loop-parts",
+        title: "Loop parts",
+        step_template: {
+          kind: "control",
+          control: "for_each",
+          items_expression: ["Tail", "Ear_L"],
+          item_variable: "part",
+          steps: [],
+        },
+      },
+    ],
+  };
+
+  assert.doesNotThrow(() => validateBlueprint(blueprint));
+});

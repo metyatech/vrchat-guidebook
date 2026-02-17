@@ -3,23 +3,45 @@
 const WEB_ACTIONS = new Set([
   "open_url",
   "click",
+  "double_click",
+  "right_click",
+  "drag_drop",
   "drag",
+  "type_text",
   "type",
+  "wait_for",
   "wait",
+  "assert",
+  "press_keys",
   "keys",
   "shortcut",
   "screenshot",
+  "start_video",
+  "stop_video",
+  "emit_annotation",
 ]);
 
 const UNITY_ACTIONS = new Set([
   "click",
+  "double_click",
+  "right_click",
+  "drag_drop",
   "drag",
+  "type_text",
   "type",
+  "wait_for",
   "wait",
+  "assert",
+  "press_keys",
   "keys",
   "shortcut",
+  "open_menu",
   "menu",
+  "select_hierarchy",
   "screenshot",
+  "start_video",
+  "stop_video",
+  "emit_annotation",
 ]);
 
 function ensureObject(value, label) {
@@ -60,16 +82,27 @@ function validateProfile(profile) {
 
 function validateBlueprintStep(step, target) {
   ensureObject(step, "blueprint step");
-  ensureString(step.id, "step.id");
-  ensureString(step.title, "step.title");
-  ensureString(step.action, "step.action");
-  ensureObject(step.params_template, "step.params_template");
+  if (step.id !== undefined) {
+    ensureString(step.id, "step.id");
+  }
+  if (step.title !== undefined) {
+    ensureString(step.title, "step.title");
+  }
 
-  const allowed = target === "web" ? WEB_ACTIONS : UNITY_ACTIONS;
-  if (!allowed.has(step.action)) {
-    throw new Error(
-      `Unsupported action "${step.action}" for target "${target}" at step "${step.id}".`
-    );
+  if (step.step_template !== undefined) {
+    ensureObject(step.step_template, "step.step_template");
+  }
+
+  if (step.step_template === undefined) {
+    ensureString(step.action, "step.action");
+    ensureObject(step.params_template, "step.params_template");
+
+    const allowed = target === "web" ? WEB_ACTIONS : UNITY_ACTIONS;
+    if (!allowed.has(step.action)) {
+      throw new Error(
+        `Unsupported action "${step.action}" for target "${target}" at step "${step.id}".`
+      );
+    }
   }
 }
 

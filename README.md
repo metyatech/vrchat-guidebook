@@ -52,7 +52,8 @@ The portability model separates concerns into four data types:
 - `automation/portable/capabilities/*.json`: version-aware capability rules for conditional steps
 
 The compiler resolves templates and conditions into deterministic generated scenarios under `automation/scenarios/generated/`.
-Those scenarios are then executed to regenerate markdown, screenshots, videos, and `steps.json`.
+Those scenarios are emitted as `automation-scenario` schema `2.0.0` and then executed to regenerate markdown, screenshots, videos, and `steps.json`.
+Blueprint steps can be authored either as compact `action + params_template` entries or full `step_template` objects for control/group structures.
 
 ### Portable commands
 

@@ -179,10 +179,15 @@ test("compileMatrix resolves templates and conditionally includes steps", () => 
 
   assert.equal(compiled.jobs.length, 1);
   const [job] = compiled.jobs;
+  assert.equal(job.scenario.schema_version, "2.0.0");
   assert.equal(job.scenario.scenario_id, "unity-alice-pc");
   assert.equal(job.scenario.target, "unity");
   assert.equal(job.scenario.steps.length, 2);
+  assert.equal(job.scenario.steps[0].kind, "action");
+  assert.equal(job.scenario.steps[0].action, "click");
+  assert.equal(job.scenario.steps[0].target.strategy, "coordinate");
   assert.equal(job.scenario.steps[1].id, "open-control-panel");
+  assert.equal(job.scenario.steps[1].timing.stability_ms, 800);
   assert.equal(
     job.scenario.metadata.unity_project_path,
     "./projects/alice"
@@ -209,4 +214,79 @@ test("compileMatrix throws on missing references", () => {
       }),
     /missing required reference/i
   );
+});
+
+test("compileMatrix supports step_template for v2 control steps", () => {
+  const profile = {
+    schema_version: "1.0.0",
+    profile_id: "akane",
+    name: "Akane",
+    target: "unity",
+    unity: {
+      execution_mode: "attach",
+      project_path: "./projects/akane",
+      window_hint: "Unity",
+    },
+    variables: {
+      targets: ["Tail", "Ear_L"],
+    },
+  };
+
+  const blueprint = {
+    schema_version: "1.0.0",
+    blueprint_id: "unity-control-v2",
+    name: "Unity Control V2",
+    target: "unity",
+    metadata_template: {},
+    steps: [
+      {
+        id: "loop-targets",
+        title: "Loop Targets",
+        step_template: {
+          kind: "control",
+          control: "for_each",
+          items_expression: {
+            $ref: "profile.variables.targets",
+          },
+          item_variable: "part",
+          steps: [
+            {
+              id: "open-menu-${part}",
+              title: "Open ${part} menu",
+              kind: "action",
+              action: "open_menu",
+              input: {
+                menu_path: "Tools/${part}",
+              },
+            },
+          ],
+        },
+      },
+    ],
+  };
+
+  const matrix = {
+    schema_version: "1.0.0",
+    matrix_id: "default",
+    jobs: [
+      {
+        job_id: "unity-control-job",
+        profile_id: "akane",
+        blueprint_id: "unity-control-v2",
+      },
+    ],
+  };
+
+  const compiled = compileMatrix({
+    matrix,
+    profilesById: { akane: profile },
+    blueprintsById: { "unity-control-v2": blueprint },
+    capabilityRules: { schema_version: "1.0.0", rules: [] },
+  });
+
+  const step = compiled.jobs[0].scenario.steps[0];
+  assert.equal(step.kind, "control");
+  assert.equal(step.control, "for_each");
+  assert.deepEqual(step.items_expression, ["Tail", "Ear_L"]);
+  assert.equal(step.steps[0].input.menu_path, "Tools/${part}");
 });
