@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
-    "@metyatech/automation-scenario-studio": "git+https://github.com/metyatech/automation-scenario-studio.git#cf3f7351a57f89d73463a718f9e436176f247fcc",
+    "@metyatech/automation-scenario-studio": "https://codeload.github.com/metyatech/automation-scenario-studio/tar.gz/0239937c8eb5c3bf7c246bdac7082f6fee5f91bf",
     "@playwright/test": "^1.55.0",
     "cross-env": "^10.1.0",
     "pa11y-ci": "^4.0.1",
