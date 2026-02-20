@@ -4,9 +4,10 @@
   "version": "0.1.0",
   "description": "VRChat community guide site built with VitePress",
   "scripts": {
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:build:local": "cross-env SITE_URL=http://127.0.0.1:4174 SITE_BASE=/ vitepress build docs",
+    "docs:prepare": "node scripts/prepare-docs-assets.mjs",
+    "docs:dev": "npm run docs:prepare && vitepress dev docs",
+    "docs:build": "npm run docs:prepare && vitepress build docs",
+    "docs:build:local": "npm run docs:prepare && cross-env SITE_URL=http://127.0.0.1:4174 SITE_BASE=/ vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:preview:host": "vitepress preview docs --host 127.0.0.1 --port 4174",
     "test:automation": "node --test tests/automation/*.test.cjs",

@@ -2,16 +2,16 @@
 
 Scenario ID: `unity-editor-basic`
 
-[操作動画](../../artifacts/unity-editor-basic/video/unity-basic-annotated.mp4)
+[操作動画](/artifacts/unity-editor-basic/video/unity-basic-annotated.mp4)
 
 ## 1. Open Unity Editor
 
 Launch Unity Editor and open the top menu.
 
-![Open Unity Editor](../../artifacts/unity-editor-basic/screenshots/open-unity-editor.png)
+![Open Unity Editor](/artifacts/unity-editor-basic/screenshots/open-unity-editor.png)
 
 ## 2. Drag item to Scene view
 
 Perform a drag gesture inside Unity Editor.
 
-![Drag item to Scene view](../../artifacts/unity-editor-basic/screenshots/drag-hierarchy-item.png)
+![Drag item to Scene view](/artifacts/unity-editor-basic/screenshots/drag-hierarchy-item.png)
