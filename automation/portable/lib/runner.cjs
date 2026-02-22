@@ -20,8 +20,8 @@ function buildRunPlan({ compiledMatrix, recordVideo = true }) {
       "--markdown",
       job.markdown_path,
       "--record-video",
-      flag,
-    ],
+      flag
+    ]
   }));
 }
 
@@ -37,20 +37,20 @@ function buildStudioInvocation({ cwd, args }) {
   );
   return {
     command: process.execPath,
-    args: [cliPath, ...args],
+    args: [cliPath, ...args]
   };
 }
 
 async function spawnStudioCommand(entry, cwd) {
   const invocation = buildStudioInvocation({
     cwd,
-    args: entry.args,
+    args: entry.args
   });
   await new Promise((resolve, reject) => {
     const child = spawn(invocation.command, invocation.args, {
       cwd,
       stdio: "inherit",
-      shell: false,
+      shell: false
     });
     child.once("error", reject);
     child.once("exit", (code) => {
@@ -59,9 +59,7 @@ async function spawnStudioCommand(entry, cwd) {
         return;
       }
       reject(
-        new Error(
-          `automation-scenario failed for job "${entry.job_id}" with exit code ${code}.`
-        )
+        new Error(`automation-scenario failed for job "${entry.job_id}" with exit code ${code}.`)
       );
     });
   });
@@ -72,11 +70,11 @@ async function runCompiledJobs({
   dryRun = false,
   recordVideo = true,
   executeCommand = spawnStudioCommand,
-  cwd = process.cwd(),
+  cwd = process.cwd()
 }) {
   const plan = buildRunPlan({
     compiledMatrix,
-    recordVideo,
+    recordVideo
   });
 
   if (dryRun) {
@@ -93,5 +91,5 @@ module.exports = {
   buildRunPlan,
   buildStudioInvocation,
   runCompiledJobs,
-  spawnStudioCommand,
+  spawnStudioCommand
 };

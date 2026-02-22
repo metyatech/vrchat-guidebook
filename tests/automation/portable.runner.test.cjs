@@ -4,7 +4,7 @@ const assert = require("node:assert/strict");
 const {
   buildRunPlan,
   runCompiledJobs,
-  buildStudioInvocation,
+  buildStudioInvocation
 } = require("../../automation/portable/lib/runner.cjs");
 
 function sampleCompiledMatrix() {
@@ -16,22 +16,22 @@ function sampleCompiledMatrix() {
         job_id: "unity-job",
         scenario_path: "automation/scenarios/generated/unity-job.scenario.json",
         output_dir: "artifacts/unity-job",
-        markdown_path: "docs/controls/auto-unity-job.md",
+        markdown_path: "docs/controls/auto-unity-job.md"
       },
       {
         job_id: "web-job",
         scenario_path: "automation/scenarios/generated/web-job.scenario.json",
         output_dir: "artifacts/web-job",
-        markdown_path: "docs/controls/auto-web-job.md",
-      },
-    ],
+        markdown_path: "docs/controls/auto-web-job.md"
+      }
+    ]
   };
 }
 
 test("buildRunPlan creates deterministic command arguments", () => {
   const plan = buildRunPlan({
     compiledMatrix: sampleCompiledMatrix(),
-    recordVideo: false,
+    recordVideo: false
   });
 
   assert.equal(plan.length, 2);
@@ -44,7 +44,7 @@ test("buildRunPlan creates deterministic command arguments", () => {
     "--markdown",
     "docs/controls/auto-unity-job.md",
     "--record-video",
-    "false",
+    "false"
   ]);
 });
 
@@ -56,7 +56,7 @@ test("runCompiledJobs dry-run does not execute command runner", async () => {
     recordVideo: true,
     executeCommand: async () => {
       called = true;
-    },
+    }
   });
 
   assert.equal(called, false);
@@ -72,7 +72,7 @@ test("runCompiledJobs executes all jobs in order", async () => {
     recordVideo: false,
     executeCommand: async (entry) => {
       executed.push(entry.job_id);
-    },
+    }
   });
 
   assert.deepEqual(executed, ["unity-job", "web-job"]);
@@ -81,7 +81,7 @@ test("runCompiledJobs executes all jobs in order", async () => {
 test("buildStudioInvocation uses node cli entrypoint instead of cmd shim", () => {
   const invocation = buildStudioInvocation({
     cwd: "D:/work/repo",
-    args: ["run-scenario", "--scenario", "automation/scenarios/generated/web.scenario.json"],
+    args: ["run-scenario", "--scenario", "automation/scenarios/generated/web.scenario.json"]
   });
 
   assert.equal(invocation.command, process.execPath);

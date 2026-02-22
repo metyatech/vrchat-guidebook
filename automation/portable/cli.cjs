@@ -19,11 +19,7 @@ async function writeJsonFile(filePath, payload) {
   await fs.writeFile(filePath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
-async function loadJsonFilesByKey({
-  dirPath,
-  keyField,
-  suffixFilter = ".json",
-}) {
+async function loadJsonFilesByKey({ dirPath, keyField, suffixFilter = ".json" }) {
   const entries = await fs.readdir(dirPath, { withFileTypes: true });
   const map = {};
 
@@ -61,34 +57,34 @@ function scaffoldProfileTemplate({ profileId, name, target }) {
     target,
     versions: {
       unity: "",
-      vrchat_sdk: "",
+      vrchat_sdk: ""
     },
     capabilities: {},
     variables: {},
-    anchors: {},
+    anchors: {}
   };
 
   if (target === "unity") {
     base.unity = {
       execution_mode: "attach",
       project_path: "./path/to/unity-project",
-      window_hint: "Unity",
+      window_hint: "Unity"
     };
     base.anchors = {
       sample_anchor: {
         x_ratio: 0.5,
         y_ratio: 0.5,
         box_width: 180,
-        box_height: 48,
-      },
+        box_height: 48
+      }
     };
   } else {
     base.web = {
       start_url: "https://example.com",
-      browser: "chrome",
+      browser: "chrome"
     };
     base.selectors = {
-      sample_button: "css:button.sample",
+      sample_button: "css:button.sample"
     };
   }
 
@@ -104,18 +100,18 @@ async function compileFromFiles({
   manifestPath,
   jobId,
   profileId,
-  cwd = process.cwd(),
+  cwd = process.cwd()
 }) {
   const matrix = await readJsonFile(matrixPath);
   const profilesById = await loadJsonFilesByKey({
     dirPath: profilesDir,
     keyField: "profile_id",
-    suffixFilter: ".profile.json",
+    suffixFilter: ".profile.json"
   });
   const blueprintsById = await loadJsonFilesByKey({
     dirPath: blueprintsDir,
     keyField: "blueprint_id",
-    suffixFilter: ".blueprint.json",
+    suffixFilter: ".blueprint.json"
   });
 
   let capabilityRules = { schema_version: "1.0.0", rules: [] };
@@ -127,7 +123,7 @@ async function compileFromFiles({
     matrix,
     profilesById,
     blueprintsById,
-    capabilityRules,
+    capabilityRules
   });
 
   const resolvedGeneratedScenarioDir = generatedScenarioDir
@@ -146,9 +142,7 @@ async function compileFromFiles({
 
   if (filteredJobs.length === 0) {
     throw new Error(
-      `no jobs matched filters (jobId=${jobId || "any"}, profileId=${
-        profileId || "any"
-      }).`
+      `no jobs matched filters (jobId=${jobId || "any"}, profileId=${profileId || "any"}).`
     );
   }
 
@@ -159,14 +153,14 @@ async function compileFromFiles({
     await writeJsonFile(scenarioPath, job.scenario);
     jobs.push({
       ...job,
-      scenario_path: toPosixPath(path.relative(cwd, scenarioPath)),
+      scenario_path: toPosixPath(path.relative(cwd, scenarioPath))
     });
   }
 
   const manifest = {
     matrix_id: compiled.matrix_id,
     generated_at: compiled.generated_at,
-    jobs,
+    jobs
   };
 
   if (manifestPath) {
@@ -188,7 +182,7 @@ async function runFromFiles({
   profileId,
   dryRun = false,
   recordVideo = true,
-  cwd = process.cwd(),
+  cwd = process.cwd()
 }) {
   const compiled = await compileFromFiles({
     matrixPath,
@@ -199,21 +193,21 @@ async function runFromFiles({
     manifestPath,
     jobId,
     profileId,
-    cwd,
+    cwd
   });
 
   return runCompiledJobs({
     compiledMatrix: compiled,
     dryRun,
     recordVideo,
-    cwd,
+    cwd
   });
 }
 
 function parseCliArgs(argv) {
   const [command, ...args] = argv;
   const parsed = {
-    command,
+    command
   };
   for (let index = 0; index < args.length; index += 1) {
     const token = args[index];
@@ -266,7 +260,7 @@ async function runCli(argv = process.argv.slice(2)) {
         "Usage:",
         "  node automation/portable/cli.cjs compile --matrix <path> --profiles-dir <dir> --blueprints-dir <dir> [--capabilities <path>] [--generated-scenarios <dir>] [--manifest <path>]",
         "  node automation/portable/cli.cjs run --matrix <path> --profiles-dir <dir> --blueprints-dir <dir> [--capabilities <path>] [--generated-scenarios <dir>] [--manifest <path>] [--dry-run <true|false>] [--record-video <true|false>]",
-        "  node automation/portable/cli.cjs scaffold-profile --profile-id <id> --name <name> --target <unity|web> --output <path>",
+        "  node automation/portable/cli.cjs scaffold-profile --profile-id <id> --name <name> --target <unity|web> --output <path>"
       ].join("\n")
     );
     return;
@@ -281,7 +275,7 @@ async function runCli(argv = process.argv.slice(2)) {
       generatedScenarioDir: parsed["generated-scenarios"],
       manifestPath: parsed.manifest,
       jobId: parsed["job-id"],
-      profileId: parsed["profile-id"],
+      profileId: parsed["profile-id"]
     });
     console.log(JSON.stringify(manifest, null, 2));
     return;
@@ -298,7 +292,7 @@ async function runCli(argv = process.argv.slice(2)) {
       jobId: parsed["job-id"],
       profileId: parsed["profile-id"],
       dryRun: parseBoolOption(parsed["dry-run"], false),
-      recordVideo: parseBoolOption(parsed["record-video"], true),
+      recordVideo: parseBoolOption(parsed["record-video"], true)
     });
     console.log(JSON.stringify(plan, null, 2));
     return;
@@ -308,7 +302,7 @@ async function runCli(argv = process.argv.slice(2)) {
     const profile = scaffoldProfileTemplate({
       profileId: requireOption(parsed, "profile-id"),
       name: requireOption(parsed, "name"),
-      target: requireOption(parsed, "target"),
+      target: requireOption(parsed, "target")
     });
     await writeJsonFile(requireOption(parsed, "output"), profile);
     console.log(`profile template written: ${requireOption(parsed, "output")}`);
@@ -329,5 +323,5 @@ module.exports = {
   compileFromFiles,
   runFromFiles,
   scaffoldProfileTemplate,
-  runCli,
+  runCli
 };

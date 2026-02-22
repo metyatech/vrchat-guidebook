@@ -1,103 +1,103 @@
-import { onBeforeUnmount, onMounted, watch, nextTick } from 'vue'
-import { useRoute } from 'vitepress'
-import DefaultTheme from 'vitepress/theme'
-import './custom.css'
+import { onBeforeUnmount, onMounted, watch, nextTick } from "vue";
+import { useRoute } from "vitepress";
+import DefaultTheme from "vitepress/theme";
+import "./custom.css";
 
-let overlay: HTMLDivElement | undefined
-let overlayImage: HTMLImageElement | undefined
+let overlay: HTMLDivElement | undefined;
+let overlayImage: HTMLImageElement | undefined;
 
 function ensureOverlay() {
   if (overlay && overlayImage) {
-    return
+    return;
   }
 
-  overlay = document.createElement('div')
-  overlay.className = 'image-zoom-overlay'
-  overlay.setAttribute('aria-hidden', 'true')
+  overlay = document.createElement("div");
+  overlay.className = "image-zoom-overlay";
+  overlay.setAttribute("aria-hidden", "true");
 
-  overlayImage = document.createElement('img')
-  overlayImage.className = 'image-zoom-overlay-image'
-  overlayImage.alt = ''
-  overlay.appendChild(overlayImage)
+  overlayImage = document.createElement("img");
+  overlayImage.className = "image-zoom-overlay-image";
+  overlayImage.alt = "";
+  overlay.appendChild(overlayImage);
 
-  overlay.addEventListener('click', () => {
-    closeOverlay()
-  })
+  overlay.addEventListener("click", () => {
+    closeOverlay();
+  });
 
-  overlayImage.addEventListener('click', (event) => {
-    event.stopPropagation()
-    closeOverlay()
-  })
+  overlayImage.addEventListener("click", (event) => {
+    event.stopPropagation();
+    closeOverlay();
+  });
 
-  document.body.appendChild(overlay)
+  document.body.appendChild(overlay);
 }
 
 function openOverlay(image: HTMLImageElement) {
-  ensureOverlay()
+  ensureOverlay();
   if (!overlay || !overlayImage) {
-    return
+    return;
   }
 
-  overlayImage.src = image.currentSrc || image.src
-  overlayImage.alt = image.alt || ''
-  overlay.classList.add('is-open')
-  overlay.setAttribute('aria-hidden', 'false')
-  document.body.style.overflow = 'hidden'
+  overlayImage.src = image.currentSrc || image.src;
+  overlayImage.alt = image.alt || "";
+  overlay.classList.add("is-open");
+  overlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
 }
 
 function closeOverlay() {
   if (!overlay || !overlayImage) {
-    return
+    return;
   }
 
-  overlay.classList.remove('is-open')
-  overlay.setAttribute('aria-hidden', 'true')
-  overlayImage.src = ''
-  overlayImage.alt = ''
-  document.body.style.overflow = ''
+  overlay.classList.remove("is-open");
+  overlay.setAttribute("aria-hidden", "true");
+  overlayImage.src = "";
+  overlayImage.alt = "";
+  document.body.style.overflow = "";
 }
 
 function bindImageZoom() {
-  const images = document.querySelectorAll<HTMLImageElement>('.vp-doc img:not(.no-zoom)')
+  const images = document.querySelectorAll<HTMLImageElement>(".vp-doc img:not(.no-zoom)");
   images.forEach((image) => {
-    if (image.dataset.zoomBound === 'true') {
-      return
+    if (image.dataset.zoomBound === "true") {
+      return;
     }
 
-    image.dataset.zoomBound = 'true'
-    image.classList.add('image-zoom-target')
-    image.addEventListener('click', () => {
-      openOverlay(image)
-    })
-  })
+    image.dataset.zoomBound = "true";
+    image.classList.add("image-zoom-target");
+    image.addEventListener("click", () => {
+      openOverlay(image);
+    });
+  });
 }
 
 export default {
   extends: DefaultTheme,
   setup() {
-    const route = useRoute()
+    const route = useRoute();
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeOverlay()
+      if (event.key === "Escape") {
+        closeOverlay();
       }
-    }
+    };
 
     onMounted(() => {
-      bindImageZoom()
-      document.addEventListener('keydown', onKeydown)
-    })
+      bindImageZoom();
+      document.addEventListener("keydown", onKeydown);
+    });
 
     watch(
       () => route.path,
       async () => {
-        await nextTick()
-        bindImageZoom()
+        await nextTick();
+        bindImageZoom();
       }
-    )
+    );
 
     onBeforeUnmount(() => {
-      document.removeEventListener('keydown', onKeydown)
-      closeOverlay()
-    })
+      document.removeEventListener("keydown", onKeydown);
+      closeOverlay();
+    });
   }
-}
+};

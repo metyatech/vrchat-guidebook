@@ -39,11 +39,7 @@
   },
   "variables": {
     "hierarchy": {
-      "avatar_root_candidates": [
-        "AvatarRoot",
-        "Body/AvatarRoot",
-        "Armature/AvatarRoot"
-      ]
+      "avatar_root_candidates": ["AvatarRoot", "Body/AvatarRoot", "Armature/AvatarRoot"]
     }
   }
 }

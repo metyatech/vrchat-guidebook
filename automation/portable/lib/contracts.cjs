@@ -18,7 +18,7 @@ const WEB_ACTIONS = new Set([
   "screenshot",
   "start_video",
   "stop_video",
-  "emit_annotation",
+  "emit_annotation"
 ]);
 
 const UNITY_ACTIONS = new Set([
@@ -41,7 +41,7 @@ const UNITY_ACTIONS = new Set([
   "screenshot",
   "start_video",
   "stop_video",
-  "emit_annotation",
+  "emit_annotation"
 ]);
 
 function ensureObject(value, label) {
@@ -151,5 +151,5 @@ module.exports = {
   UNITY_ACTIONS,
   validateProfile,
   validateBlueprint,
-  validateMatrix,
+  validateMatrix
 };

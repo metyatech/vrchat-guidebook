@@ -1,11 +1,7 @@
 "use strict";
 
 const path = require("node:path");
-const {
-  validateProfile,
-  validateBlueprint,
-  validateMatrix,
-} = require("./contracts.cjs");
+const { validateProfile, validateBlueprint, validateMatrix } = require("./contracts.cjs");
 const { evaluateCondition, getPathValue } = require("./conditions.cjs");
 
 function sanitizeId(input) {
@@ -59,7 +55,9 @@ function resolveTemplateValue(value, context) {
 }
 
 function normalizeLegacyAction(action) {
-  const normalized = String(action || "").trim().toLowerCase();
+  const normalized = String(action || "")
+    .trim()
+    .toLowerCase();
   switch (normalized) {
     case "drag":
       return "drag_drop";
@@ -113,24 +111,24 @@ function buildWebTargetFromLocator(locator, stepId) {
     return {
       strategy: "web",
       web: {
-        css: normalized.slice(4),
-      },
+        css: normalized.slice(4)
+      }
     };
   }
   if (normalized.startsWith("xpath:")) {
     return {
       strategy: "web",
       web: {
-        xpath: normalized.slice(6),
-      },
+        xpath: normalized.slice(6)
+      }
     };
   }
 
   return {
     strategy: "web",
     web: {
-      css: normalized,
-    },
+      css: normalized
+    }
   };
 }
 
@@ -146,16 +144,14 @@ function readCoordinateTarget(params, xKey, yKey, stepId) {
   const xRatio = toFiniteNumber(params[xKey]);
   const yRatio = toFiniteNumber(params[yKey]);
   if (xRatio === undefined || yRatio === undefined) {
-    throw new Error(
-      `step "${stepId}" requires numeric params.${xKey} and params.${yKey}.`
-    );
+    throw new Error(`step "${stepId}" requires numeric params.${xKey} and params.${yKey}.`);
   }
   return {
     strategy: "coordinate",
     coordinate: {
       x_ratio: xRatio,
-      y_ratio: yRatio,
-    },
+      y_ratio: yRatio
+    }
   };
 }
 
@@ -199,9 +195,7 @@ function compileLegacyStep(step, params, context) {
   const id = interpolateString(step.id, context);
   const title = interpolateString(step.title, context);
   const description =
-    step.description !== undefined
-      ? interpolateString(step.description, context)
-      : undefined;
+    step.description !== undefined ? interpolateString(step.description, context) : undefined;
   const action = normalizeLegacyAction(step.action);
   const scenarioTarget = context.blueprint && context.blueprint.target;
   const timing = buildTiming(params);
@@ -210,7 +204,7 @@ function compileLegacyStep(step, params, context) {
     id,
     title,
     kind: "action",
-    action,
+    action
   };
 
   if (description && description.trim() !== "") {
@@ -229,7 +223,7 @@ function compileLegacyStep(step, params, context) {
 
   if (action === "open_url") {
     compiled.input = {
-      url: readRequiredString(params, "url", id),
+      url: readRequiredString(params, "url", id)
     };
     return compiled;
   }
@@ -250,7 +244,7 @@ function compileLegacyStep(step, params, context) {
   if (action === "drag_drop") {
     compiled.target = readCoordinateTarget(params, "to_x_ratio", "to_y_ratio", id);
     compiled.input = {
-      source: readCoordinateTarget(params, "from_x_ratio", "from_y_ratio", id),
+      source: readCoordinateTarget(params, "from_x_ratio", "from_y_ratio", id)
     };
     return compiled;
   }
@@ -260,7 +254,7 @@ function compileLegacyStep(step, params, context) {
     if (menuPathCandidates.length > 0) {
       compiled.input = {
         menu_path: menuPathCandidates[0],
-        menu_path_candidates: menuPathCandidates,
+        menu_path_candidates: menuPathCandidates
       };
       return compiled;
     }
@@ -276,21 +270,21 @@ function compileLegacyStep(step, params, context) {
       compiled.target = {
         strategy: "unity_hierarchy",
         unity_hierarchy: {
-          path: firstPath,
+          path: firstPath
         },
         fallbacks: fallbackPaths.map((candidatePath) => ({
           strategy: "unity_hierarchy",
           unity_hierarchy: {
-            path: candidatePath,
-          },
-        })),
+            path: candidatePath
+          }
+        }))
       };
       return compiled;
     }
 
     compiled.target = {
       strategy: "unity_hierarchy",
-      unity_hierarchy: { path: readRequiredString(params, "hierarchy_path", id) },
+      unity_hierarchy: { path: readRequiredString(params, "hierarchy_path", id) }
     };
     return compiled;
   }
@@ -303,16 +297,13 @@ function compileLegacyStep(step, params, context) {
     if (Object.keys(input).length > 0) {
       compiled.input = input;
     }
-    if (
-      params.x_ratio !== undefined &&
-      params.y_ratio !== undefined
-    ) {
+    if (params.x_ratio !== undefined && params.y_ratio !== undefined) {
       compiled.target = readCoordinateTarget(params, "x_ratio", "y_ratio", id);
       const boxInput = pickBoxSizeInput(params);
       if (boxInput) {
         compiled.input = {
           ...(compiled.input || {}),
-          ...boxInput,
+          ...boxInput
         };
       }
     }
@@ -370,7 +361,7 @@ function compileStepTemplate(step, context) {
   }
 
   const compiled = {
-    ...resolved,
+    ...resolved
   };
 
   if (compiled.id === undefined && step.id !== undefined) {
@@ -427,8 +418,8 @@ function createCapabilities(profile, capabilityRules, baseContext) {
     const matched = evaluateCondition(rule.when, {
       ...baseContext,
       capabilities: {
-        ...fromRules,
-      },
+        ...fromRules
+      }
     });
     if (matched) {
       fromRules[rule.capability] = true;
@@ -437,7 +428,7 @@ function createCapabilities(profile, capabilityRules, baseContext) {
 
   return {
     ...fromRules,
-    ...(profile.capabilities || {}),
+    ...(profile.capabilities || {})
   };
 }
 
@@ -452,12 +443,12 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
     matrix,
     job,
     profile,
-    blueprint,
+    blueprint
   };
   const capabilities = createCapabilities(profile, capabilityRules, baseContext);
   const context = {
     ...baseContext,
-    capabilities,
+    capabilities
   };
 
   const steps = [];
@@ -487,7 +478,7 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
       path.join("automation", "scenarios", "generated", `${scenarioId}.scenario.json`),
     {
       ...context,
-      scenario: { id: scenarioId, name: scenarioName },
+      scenario: { id: scenarioId, name: scenarioName }
     }
   );
 
@@ -507,7 +498,7 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
     variables: Array.isArray(blueprint.variables_template)
       ? resolveTemplateValue(blueprint.variables_template, context)
       : [],
-    steps,
+    steps
   };
 
   const execution = resolveOptionalObjectTemplate(blueprint.execution_template, context);
@@ -528,7 +519,7 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
     scenario_path: scenarioPath,
     output_dir: outputDir,
     markdown_path: markdownPath,
-    scenario,
+    scenario
   };
 }
 
@@ -536,7 +527,7 @@ function compileMatrix({
   matrix,
   profilesById,
   blueprintsById,
-  capabilityRules = { schema_version: "1.0.0", rules: [] },
+  capabilityRules = { schema_version: "1.0.0", rules: [] }
 }) {
   validateMatrix(matrix);
 
@@ -563,19 +554,19 @@ function compileMatrix({
       profile,
       blueprint,
       matrix,
-      capabilityRules,
+      capabilityRules
     });
   });
 
   return {
     matrix_id: matrix.matrix_id,
     generated_at: new Date().toISOString(),
-    jobs,
+    jobs
   };
 }
 
 module.exports = {
   compileMatrix,
   interpolateString,
-  resolveTemplateValue,
+  resolveTemplateValue
 };

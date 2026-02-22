@@ -35,9 +35,7 @@ function compareVersions(left, right) {
   const leftNormalized = normalizeVersion(left);
   const rightNormalized = normalizeVersion(right);
   if (!leftNormalized || !rightNormalized) {
-    throw new Error(
-      `unable to compare versions: left="${left}" right="${right}"`
-    );
+    throw new Error(`unable to compare versions: left="${left}" right="${right}"`);
   }
   return semver.compare(leftNormalized, rightNormalized);
 }
@@ -75,9 +73,10 @@ function evaluateCondition(condition, context) {
   }
   if (condition.exists) {
     return (
-      getPathValue(context, typeof condition.exists === "string"
-        ? condition.exists
-        : condition.exists.path) !== undefined
+      getPathValue(
+        context,
+        typeof condition.exists === "string" ? condition.exists : condition.exists.path
+      ) !== undefined
     );
   }
   if (condition.version_gte) {
@@ -97,13 +96,11 @@ function evaluateCondition(condition, context) {
     return compareVersions(left, condition.version_lt.value) < 0;
   }
 
-  throw new Error(
-    `unsupported condition: ${JSON.stringify(condition)}`
-  );
+  throw new Error(`unsupported condition: ${JSON.stringify(condition)}`);
 }
 
 module.exports = {
   getPathValue,
   evaluateCondition,
-  compareVersions,
+  compareVersions
 };

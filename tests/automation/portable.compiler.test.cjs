@@ -11,30 +11,30 @@ function buildFixture() {
     target: "unity",
     versions: {
       unity: "2022.3.22f1",
-      vrchat_sdk: "3.7.0",
+      vrchat_sdk: "3.7.0"
     },
     capabilities: {
-      supports_legacy_panel: false,
+      supports_legacy_panel: false
     },
     unity: {
       execution_mode: "attach",
       project_path: "./projects/alice",
-      window_hint: "Unity",
+      window_hint: "Unity"
     },
     anchors: {
       hierarchy_avatar_root: {
         x_ratio: 0.2,
         y_ratio: 0.4,
         box_width: 180,
-        box_height: 48,
+        box_height: 48
       },
       inspector_expression_foldout: {
         x_ratio: 0.64,
         y_ratio: 0.47,
         box_width: 220,
-        box_height: 48,
-      },
-    },
+        box_height: 48
+      }
+    }
   };
 
   const blueprint = {
@@ -45,7 +45,7 @@ function buildFixture() {
     metadata_template: {
       target_window_hint: "{{profile.unity.window_hint}}",
       unity_execution_mode: "{{profile.unity.execution_mode}}",
-      unity_project_path: "{{profile.unity.project_path}}",
+      unity_project_path: "{{profile.unity.project_path}}"
     },
     steps: [
       {
@@ -55,19 +55,19 @@ function buildFixture() {
         action: "click",
         params_template: {
           x_ratio: {
-            $ref: "profile.anchors.hierarchy_avatar_root.x_ratio",
+            $ref: "profile.anchors.hierarchy_avatar_root.x_ratio"
           },
           y_ratio: {
-            $ref: "profile.anchors.hierarchy_avatar_root.y_ratio",
+            $ref: "profile.anchors.hierarchy_avatar_root.y_ratio"
           },
           box_width: {
-            $ref: "profile.anchors.hierarchy_avatar_root.box_width",
+            $ref: "profile.anchors.hierarchy_avatar_root.box_width"
           },
           box_height: {
-            $ref: "profile.anchors.hierarchy_avatar_root.box_height",
+            $ref: "profile.anchors.hierarchy_avatar_root.box_height"
           },
-          wait_seconds: 0.8,
-        },
+          wait_seconds: 0.8
+        }
       },
       {
         id: "open-control-panel",
@@ -79,29 +79,29 @@ function buildFixture() {
             {
               version_gte: {
                 path: "profile.versions.vrchat_sdk",
-                value: "3.6.0",
-              },
+                value: "3.6.0"
+              }
             },
             {
-              capability: "supports_control_panel",
-            },
-          ],
+              capability: "supports_control_panel"
+            }
+          ]
         },
         params_template: {
           x_ratio: {
-            $ref: "profile.anchors.inspector_expression_foldout.x_ratio",
+            $ref: "profile.anchors.inspector_expression_foldout.x_ratio"
           },
           y_ratio: {
-            $ref: "profile.anchors.inspector_expression_foldout.y_ratio",
+            $ref: "profile.anchors.inspector_expression_foldout.y_ratio"
           },
           box_width: {
-            $ref: "profile.anchors.inspector_expression_foldout.box_width",
+            $ref: "profile.anchors.inspector_expression_foldout.box_width"
           },
           box_height: {
-            $ref: "profile.anchors.inspector_expression_foldout.box_height",
+            $ref: "profile.anchors.inspector_expression_foldout.box_height"
           },
-          wait_seconds: 0.8,
-        },
+          wait_seconds: 0.8
+        }
       },
       {
         id: "legacy-panel-step",
@@ -109,13 +109,13 @@ function buildFixture() {
         description: "Legacy-only step.",
         action: "wait",
         when: {
-          capability: "supports_legacy_panel",
+          capability: "supports_legacy_panel"
         },
         params_template: {
-          seconds: 1,
-        },
-      },
-    ],
+          seconds: 1
+        }
+      }
+    ]
   };
 
   const matrix = {
@@ -128,13 +128,11 @@ function buildFixture() {
         blueprint_id: "unity-avatar-core",
         scenario_id_template: "unity-{{profile.profile_id}}",
         scenario_name_template: "Avatar Core - {{profile.name}}",
-        scenario_path_template:
-          "automation/scenarios/generated/{{job.job_id}}.scenario.json",
+        scenario_path_template: "automation/scenarios/generated/{{job.job_id}}.scenario.json",
         output_dir_template: "artifacts/{{profile.profile_id}}",
-        markdown_path_template:
-          "docs/controls/auto-{{profile.profile_id}}.md",
-      },
-    ],
+        markdown_path_template: "docs/controls/auto-{{profile.profile_id}}.md"
+      }
+    ]
   };
 
   const capabilityRules = {
@@ -145,20 +143,20 @@ function buildFixture() {
         when: {
           version_gte: {
             path: "profile.versions.vrchat_sdk",
-            value: "3.6.0",
-          },
-        },
+            value: "3.6.0"
+          }
+        }
       },
       {
         capability: "supports_legacy_panel",
         when: {
           version_lt: {
             path: "profile.versions.vrchat_sdk",
-            value: "3.6.0",
-          },
-        },
-      },
-    ],
+            value: "3.6.0"
+          }
+        }
+      }
+    ]
   };
 
   return { profile, blueprint, matrix, capabilityRules };
@@ -169,12 +167,12 @@ test("compileMatrix resolves templates and conditionally includes steps", () => 
   const compiled = compileMatrix({
     matrix,
     profilesById: {
-      [profile.profile_id]: profile,
+      [profile.profile_id]: profile
     },
     blueprintsById: {
-      [blueprint.blueprint_id]: blueprint,
+      [blueprint.blueprint_id]: blueprint
     },
-    capabilityRules,
+    capabilityRules
   });
 
   assert.equal(compiled.jobs.length, 1);
@@ -188,16 +186,13 @@ test("compileMatrix resolves templates and conditionally includes steps", () => 
   assert.equal(job.scenario.steps[0].target.strategy, "coordinate");
   assert.equal(job.scenario.steps[1].id, "open-control-panel");
   assert.equal(job.scenario.steps[1].timing.stability_ms, 800);
-  assert.equal(
-    job.scenario.metadata.unity_project_path,
-    "./projects/alice"
-  );
+  assert.equal(job.scenario.metadata.unity_project_path, "./projects/alice");
 });
 
 test("compileMatrix throws on missing references", () => {
   const { profile, blueprint, matrix, capabilityRules } = buildFixture();
   blueprint.steps[0].params_template.x_ratio = {
-    $ref: "profile.anchors.unknown_anchor.x_ratio",
+    $ref: "profile.anchors.unknown_anchor.x_ratio"
   };
 
   assert.throws(
@@ -205,12 +200,12 @@ test("compileMatrix throws on missing references", () => {
       compileMatrix({
         matrix,
         profilesById: {
-          [profile.profile_id]: profile,
+          [profile.profile_id]: profile
         },
         blueprintsById: {
-          [blueprint.blueprint_id]: blueprint,
+          [blueprint.blueprint_id]: blueprint
         },
-        capabilityRules,
+        capabilityRules
       }),
     /missing required reference/i
   );
@@ -225,11 +220,11 @@ test("compileMatrix supports step_template for v2 control steps", () => {
     unity: {
       execution_mode: "attach",
       project_path: "./projects/akane",
-      window_hint: "Unity",
+      window_hint: "Unity"
     },
     variables: {
-      targets: ["Tail", "Ear_L"],
-    },
+      targets: ["Tail", "Ear_L"]
+    }
   };
 
   const blueprint = {
@@ -246,7 +241,7 @@ test("compileMatrix supports step_template for v2 control steps", () => {
           kind: "control",
           control: "for_each",
           items_expression: {
-            $ref: "profile.variables.targets",
+            $ref: "profile.variables.targets"
           },
           item_variable: "part",
           steps: [
@@ -256,13 +251,13 @@ test("compileMatrix supports step_template for v2 control steps", () => {
               kind: "action",
               action: "open_menu",
               input: {
-                menu_path: "Tools/${part}",
-              },
-            },
-          ],
-        },
-      },
-    ],
+                menu_path: "Tools/${part}"
+              }
+            }
+          ]
+        }
+      }
+    ]
   };
 
   const matrix = {
@@ -272,16 +267,16 @@ test("compileMatrix supports step_template for v2 control steps", () => {
       {
         job_id: "unity-control-job",
         profile_id: "akane",
-        blueprint_id: "unity-control-v2",
-      },
-    ],
+        blueprint_id: "unity-control-v2"
+      }
+    ]
   };
 
   const compiled = compileMatrix({
     matrix,
     profilesById: { akane: profile },
     blueprintsById: { "unity-control-v2": blueprint },
-    capabilityRules: { schema_version: "1.0.0", rules: [] },
+    capabilityRules: { schema_version: "1.0.0", rules: [] }
   });
 
   const step = compiled.jobs[0].scenario.steps[0];
@@ -300,17 +295,13 @@ test("compileMatrix maps legacy candidates to runtime fallback selectors", () =>
     unity: {
       execution_mode: "attach",
       project_path: "./projects/portable",
-      window_hint: "Unity",
+      window_hint: "Unity"
     },
     variables: {
       hierarchy: {
-        avatar_root_candidates: [
-          "AvatarRoot",
-          "Body/AvatarRoot",
-          "Armature/AvatarRoot",
-        ],
-      },
-    },
+        avatar_root_candidates: ["AvatarRoot", "Body/AvatarRoot", "Armature/AvatarRoot"]
+      }
+    }
   };
 
   const blueprint = {
@@ -327,9 +318,9 @@ test("compileMatrix maps legacy candidates to runtime fallback selectors", () =>
         params_template: {
           menu_path_candidates: [
             "VRChat SDK/Show Control Panel",
-            "VRChat SDK/Utilities/Show Control Panel",
-          ],
-        },
+            "VRChat SDK/Utilities/Show Control Panel"
+          ]
+        }
       },
       {
         id: "select-avatar-root",
@@ -337,11 +328,11 @@ test("compileMatrix maps legacy candidates to runtime fallback selectors", () =>
         action: "select_hierarchy",
         params_template: {
           hierarchy_paths: {
-            $ref: "profile.variables.hierarchy.avatar_root_candidates",
-          },
-        },
-      },
-    ],
+            $ref: "profile.variables.hierarchy.avatar_root_candidates"
+          }
+        }
+      }
+    ]
   };
 
   const matrix = {
@@ -351,16 +342,16 @@ test("compileMatrix maps legacy candidates to runtime fallback selectors", () =>
       {
         job_id: "fallback-job",
         profile_id: "portable",
-        blueprint_id: "unity-fallbacks",
-      },
-    ],
+        blueprint_id: "unity-fallbacks"
+      }
+    ]
   };
 
   const compiled = compileMatrix({
     matrix,
     profilesById: { portable: profile },
     blueprintsById: { "unity-fallbacks": blueprint },
-    capabilityRules: { schema_version: "1.0.0", rules: [] },
+    capabilityRules: { schema_version: "1.0.0", rules: [] }
   });
 
   const scenarioSteps = compiled.jobs[0].scenario.steps;
@@ -368,14 +359,11 @@ test("compileMatrix maps legacy candidates to runtime fallback selectors", () =>
   assert.equal(scenarioSteps[0].input.menu_path, "VRChat SDK/Show Control Panel");
   assert.deepEqual(scenarioSteps[0].input.menu_path_candidates, [
     "VRChat SDK/Show Control Panel",
-    "VRChat SDK/Utilities/Show Control Panel",
+    "VRChat SDK/Utilities/Show Control Panel"
   ]);
 
   assert.equal(scenarioSteps[1].action, "select_hierarchy");
   assert.equal(scenarioSteps[1].target.unity_hierarchy.path, "AvatarRoot");
   assert.equal(scenarioSteps[1].target.fallbacks.length, 2);
-  assert.equal(
-    scenarioSteps[1].target.fallbacks[0].unity_hierarchy.path,
-    "Body/AvatarRoot"
-  );
+  assert.equal(scenarioSteps[1].target.fallbacks[0].unity_hierarchy.path, "Body/AvatarRoot");
 });

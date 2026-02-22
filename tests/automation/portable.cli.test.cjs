@@ -4,10 +4,7 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const os = require("node:os");
 
-const {
-  compileFromFiles,
-  scaffoldProfileTemplate,
-} = require("../../automation/portable/cli.cjs");
+const { compileFromFiles, scaffoldProfileTemplate } = require("../../automation/portable/cli.cjs");
 
 async function withTempDir(callback) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "portable-cli-test-"));
@@ -22,7 +19,7 @@ test("scaffoldProfileTemplate emits deterministic profile skeleton", () => {
   const profile = scaffoldProfileTemplate({
     profileId: "akane-pc",
     name: "Akane PC",
-    target: "unity",
+    target: "unity"
   });
 
   assert.equal(profile.profile_id, "akane-pc");
@@ -53,21 +50,21 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
           name: "Akane PC",
           target: "unity",
           versions: {
-            vrchat_sdk: "3.7.0",
+            vrchat_sdk: "3.7.0"
           },
           unity: {
             execution_mode: "attach",
             project_path: "./projects/akane",
-            window_hint: "Unity",
+            window_hint: "Unity"
           },
           anchors: {
             avatar_root: {
               x_ratio: 0.1,
               y_ratio: 0.2,
               box_width: 100,
-              box_height: 60,
-            },
-          },
+              box_height: 60
+            }
+          }
         },
         null,
         2
@@ -85,7 +82,7 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
           metadata_template: {
             target_window_hint: "{{profile.unity.window_hint}}",
             unity_execution_mode: "{{profile.unity.execution_mode}}",
-            unity_project_path: "{{profile.unity.project_path}}",
+            unity_project_path: "{{profile.unity.project_path}}"
           },
           steps: [
             {
@@ -94,20 +91,20 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
               action: "click",
               params_template: {
                 x_ratio: {
-                  $ref: "profile.anchors.avatar_root.x_ratio",
+                  $ref: "profile.anchors.avatar_root.x_ratio"
                 },
                 y_ratio: {
-                  $ref: "profile.anchors.avatar_root.y_ratio",
+                  $ref: "profile.anchors.avatar_root.y_ratio"
                 },
                 box_width: {
-                  $ref: "profile.anchors.avatar_root.box_width",
+                  $ref: "profile.anchors.avatar_root.box_width"
                 },
                 box_height: {
-                  $ref: "profile.anchors.avatar_root.box_height",
-                },
-              },
-            },
-          ],
+                  $ref: "profile.anchors.avatar_root.box_height"
+                }
+              }
+            }
+          ]
         },
         null,
         2
@@ -126,12 +123,11 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
               profile_id: "akane-pc",
               blueprint_id: "unity-core",
               scenario_id_template: "unity-{{profile.profile_id}}",
-              scenario_path_template:
-                "automation/scenarios/generated/akane-unity.scenario.json",
+              scenario_path_template: "automation/scenarios/generated/akane-unity.scenario.json",
               output_dir_template: "artifacts/akane-unity",
-              markdown_path_template: "docs/controls/auto-akane-unity.md",
-            },
-          ],
+              markdown_path_template: "docs/controls/auto-akane-unity.md"
+            }
+          ]
         },
         null,
         2
@@ -143,7 +139,7 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
       JSON.stringify(
         {
           schema_version: "1.0.0",
-          rules: [],
+          rules: []
         },
         null,
         2
@@ -156,7 +152,7 @@ test("compileFromFiles writes generated scenario and manifest", async () => {
       blueprintsDir,
       capabilitiesPath,
       generatedScenarioDir: generatedDir,
-      manifestPath,
+      manifestPath
     });
 
     assert.equal(result.jobs.length, 1);
@@ -197,21 +193,21 @@ test("compileFromFiles supports job filtering", async () => {
           name: "Unity Default",
           target: "unity",
           versions: {
-            vrchat_sdk: "3.7.0",
+            vrchat_sdk: "3.7.0"
           },
           unity: {
             execution_mode: "attach",
             project_path: "./projects/unity",
-            window_hint: "Unity",
+            window_hint: "Unity"
           },
           anchors: {
             base: {
               x_ratio: 0.1,
               y_ratio: 0.2,
               box_width: 100,
-              box_height: 60,
-            },
-          },
+              box_height: 60
+            }
+          }
         },
         null,
         2
@@ -228,11 +224,11 @@ test("compileFromFiles supports job filtering", async () => {
           target: "web",
           web: {
             start_url: "https://example.com",
-            browser: "chrome",
+            browser: "chrome"
           },
           selectors: {
-            main: "css:a",
-          },
+            main: "css:a"
+          }
         },
         null,
         2
@@ -250,7 +246,7 @@ test("compileFromFiles supports job filtering", async () => {
           metadata_template: {
             target_window_hint: "{{profile.unity.window_hint}}",
             unity_execution_mode: "{{profile.unity.execution_mode}}",
-            unity_project_path: "{{profile.unity.project_path}}",
+            unity_project_path: "{{profile.unity.project_path}}"
           },
           steps: [
             {
@@ -259,20 +255,20 @@ test("compileFromFiles supports job filtering", async () => {
               action: "click",
               params_template: {
                 x_ratio: {
-                  $ref: "profile.anchors.base.x_ratio",
+                  $ref: "profile.anchors.base.x_ratio"
                 },
                 y_ratio: {
-                  $ref: "profile.anchors.base.y_ratio",
+                  $ref: "profile.anchors.base.y_ratio"
                 },
                 box_width: {
-                  $ref: "profile.anchors.base.box_width",
+                  $ref: "profile.anchors.base.box_width"
                 },
                 box_height: {
-                  $ref: "profile.anchors.base.box_height",
-                },
-              },
-            },
-          ],
+                  $ref: "profile.anchors.base.box_height"
+                }
+              }
+            }
+          ]
         },
         null,
         2
@@ -289,7 +285,7 @@ test("compileFromFiles supports job filtering", async () => {
           target: "web",
           metadata_template: {
             start_url: "{{profile.web.start_url}}",
-            browser: "{{profile.web.browser}}",
+            browser: "{{profile.web.browser}}"
           },
           steps: [
             {
@@ -297,10 +293,10 @@ test("compileFromFiles supports job filtering", async () => {
               title: "Open",
               action: "open_url",
               params_template: {
-                url: "{{profile.web.start_url}}",
-              },
-            },
-          ],
+                url: "{{profile.web.start_url}}"
+              }
+            }
+          ]
         },
         null,
         2
@@ -318,21 +314,19 @@ test("compileFromFiles supports job filtering", async () => {
               job_id: "unity-job",
               profile_id: "unity-default",
               blueprint_id: "unity-core",
-              scenario_path_template:
-                "automation/scenarios/generated/unity.scenario.json",
+              scenario_path_template: "automation/scenarios/generated/unity.scenario.json",
               output_dir_template: "artifacts/unity",
-              markdown_path_template: "docs/controls/auto-unity.md",
+              markdown_path_template: "docs/controls/auto-unity.md"
             },
             {
               job_id: "web-job",
               profile_id: "web-default",
               blueprint_id: "web-core",
-              scenario_path_template:
-                "automation/scenarios/generated/web.scenario.json",
+              scenario_path_template: "automation/scenarios/generated/web.scenario.json",
               output_dir_template: "artifacts/web",
-              markdown_path_template: "docs/controls/auto-web.md",
-            },
-          ],
+              markdown_path_template: "docs/controls/auto-web.md"
+            }
+          ]
         },
         null,
         2
@@ -344,7 +338,7 @@ test("compileFromFiles supports job filtering", async () => {
       JSON.stringify(
         {
           schema_version: "1.0.0",
-          rules: [],
+          rules: []
         },
         null,
         2
@@ -357,7 +351,7 @@ test("compileFromFiles supports job filtering", async () => {
       blueprintsDir,
       capabilitiesPath,
       generatedScenarioDir: generatedDir,
-      jobId: "unity-job",
+      jobId: "unity-job"
     });
 
     assert.equal(result.jobs.length, 1);

@@ -11,6 +11,7 @@
 ### Task 1: Define portable data contracts
 
 **Files:**
+
 - Create: `automation/portable/schemas/README.md`
 - Create: `automation/portable/examples/*.json`
 - Test: `tests/automation/portable.contracts.test.cjs`
@@ -41,6 +42,7 @@ Expected: PASS.
 ### Task 2: Build compiler with capability/version gating
 
 **Files:**
+
 - Create: `automation/portable/lib/compiler.cjs`
 - Create: `automation/portable/lib/conditions.cjs`
 - Test: `tests/automation/portable.compiler.test.cjs`
@@ -72,6 +74,7 @@ Expected: PASS.
 ### Task 3: Add runner CLI and dry-run safety
 
 **Files:**
+
 - Create: `automation/portable/cli.cjs`
 - Create: `automation/portable/lib/runner.cjs`
 - Test: `tests/automation/portable.runner.test.cjs`
@@ -103,6 +106,7 @@ Expected: PASS.
 ### Task 4: Integrate repository workflows
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `automation/portable/blueprints/*.json`
 - Create: `automation/portable/profiles/*.json`
@@ -136,6 +140,7 @@ Expected: PASS.
 ### Task 5: Documentation and final verification
 
 **Files:**
+
 - Modify: `README.md`
 - Create: `docs/controls/automation-portable.md`
 - Modify: `docs/controls/index.md`
