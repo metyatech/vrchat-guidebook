@@ -23,7 +23,8 @@
     "guide:portable:run:dry": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --dry-run true",
     "guide:build:web": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id web-example",
     "guide:build:unity": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id unity-editor-basic",
-    "guide:build": "npm run guide:portable:run"
+    "guide:build": "npm run guide:portable:run",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
@@ -34,6 +35,8 @@
     "eslint": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "pa11y-ci": "^4.0.1",
     "prettier": "^3.8.1",
     "serve-handler": "^6.1.6",
@@ -43,5 +46,14 @@
   "dependencies": {
     "medium-zoom": "^1.1.0",
     "semver": "^7.7.4"
+  },
+  "lint-staged": {
+    "**/*.{mjs,cjs}": [
+      "prettier --check",
+      "eslint"
+    ],
+    "*.{json,md}": [
+      "prettier --check"
+    ]
   }
 }
