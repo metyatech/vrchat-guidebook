@@ -1,6 +1,8 @@
 import { defineConfig } from "vitepress";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
+const siteTitle = "VRChat Guidebook";
+const siteDescription = "VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト";
 const siteUrl = process.env.SITE_URL || "https://metyatech.github.io";
 const siteBase = process.env.SITE_BASE || "/vrchat-guidebook/";
 
@@ -11,31 +13,30 @@ export default withMermaid({
     sitemap: {
       hostname: siteUrl
     },
-    title: "VRChat Guidebook",
-    description: "VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト",
+    title: siteTitle,
+    description: siteDescription,
     head: [
       ["meta", { property: "og:type", content: "website" }],
-      ["meta", { property: "og:title", content: "VRChat Guidebook" }],
-      [
-        "meta",
-        {
-          property: "og:description",
-          content: "VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト"
-        }
-      ],
-      ["meta", { property: "og:url", content: siteUrl + siteBase }],
       ["meta", { property: "og:locale", content: "ja_JP" }],
-      ["meta", { property: "og:site_name", content: "VRChat Guidebook" }],
-      ["meta", { name: "twitter:card", content: "summary" }],
-      ["meta", { name: "twitter:title", content: "VRChat Guidebook" }],
-      [
-        "meta",
-        {
-          name: "twitter:description",
-          content: "VRChat の操作・改変・ワールド制作の情報をまとめるガイドサイト"
-        }
-      ]
+      ["meta", { property: "og:site_name", content: siteTitle }],
+      ["meta", { name: "twitter:card", content: "summary" }]
     ],
+    transformHead({ pageData }) {
+      const title = pageData.title ? `${pageData.title} | ${siteTitle}` : siteTitle;
+      const description = pageData.description || siteDescription;
+      const relativePath = pageData.relativePath
+        .replace(/index\.md$/, "")
+        .replace(/\.md$/, ".html");
+      const pageUrl = `${siteUrl}${siteBase}${relativePath}`;
+
+      return [
+        ["meta", { property: "og:title", content: title }],
+        ["meta", { property: "og:description", content: description }],
+        ["meta", { property: "og:url", content: pageUrl }],
+        ["meta", { name: "twitter:title", content: title }],
+        ["meta", { name: "twitter:description", content: description }]
+      ];
+    },
     themeConfig: {
       search: {
         provider: "local"
