@@ -1,7 +1,9 @@
-import { onBeforeUnmount, onMounted, watch, nextTick } from "vue";
+import { h, onBeforeUnmount, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import "./custom.css";
+import GiscusComments from "./GiscusComments.vue";
+import MetaBadges from "./MetaBadges.vue";
 
 let overlay: HTMLDivElement | undefined;
 let overlayImage: HTMLImageElement | undefined;
@@ -74,6 +76,12 @@ function bindImageZoom() {
 
 export default {
   extends: DefaultTheme,
+  Layout() {
+    return h(DefaultTheme.Layout, null, {
+      "doc-before": () => h(MetaBadges),
+      "doc-after": () => h(GiscusComments)
+    });
+  },
   setup() {
     const route = useRoute();
     const onKeydown = (event: KeyboardEvent) => {

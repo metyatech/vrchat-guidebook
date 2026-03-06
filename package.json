@@ -37,15 +37,22 @@
     "globals": "^17.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "mermaid": "^11.12.3",
     "pa11y-ci": "^4.0.1",
     "prettier": "^3.8.1",
     "serve-handler": "^6.1.6",
     "sharp": "^0.34.5",
-    "vitepress": "^2.0.0-alpha.12"
+    "vitepress": "^2.0.0-alpha.12",
+    "vitepress-plugin-mermaid": "^2.0.17"
   },
   "dependencies": {
     "medium-zoom": "^1.1.0",
     "semver": "^7.7.4"
+  },
+  "overrides": {
+    "vitepress-plugin-mermaid": {
+      "vitepress": "$vitepress"
+    }
   },
   "lint-staged": {
     "**/*.{mjs,cjs}": [
