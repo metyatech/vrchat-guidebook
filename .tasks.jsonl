@@ -1,2 +1,7 @@
 {"id":"5KtX1KzA","description":"OGP メタタグ + Mermaid + Giscus + frontmatter バッジ自動表示をサイト全体対応で実装","stage":"done","createdAt":"2026-03-06T08:52:50.212Z","updatedAt":"2026-03-06T09:07:30.450Z"}
 {"id":"PSAEc6my","description":"MetaBadges: 自動化パイプライン完成後にステップメタデータからバッジ値(difficulty, time等)を自動算出するロジックを実装する","stage":"pending","createdAt":"2026-03-06T09:49:46.437Z","updatedAt":"2026-03-06T09:49:46.437Z"}
+{"id":"B10cDr6O","description":"automation-scenario-renderer: number_badge アノテーション型を実装する (spec では定義済み、renderer 未実装)","stage":"pending","createdAt":"2026-03-06T11:09:54.819Z","updatedAt":"2026-03-06T11:09:54.819Z"}
+{"id":"1-Dhykks","description":"automation-scenario-renderer: Markdown 出力で動画を <video> タグとして埋め込む ([操作動画](path) リンクから変更)","stage":"pending","createdAt":"2026-03-06T11:09:59.154Z","updatedAt":"2026-03-06T11:09:59.154Z"}
+{"id":"zKxm_cEM","description":"automation-scenario-spec + renderer: GIF/WebP アニメーション生成をスキーマ定義し実装する","stage":"pending","createdAt":"2026-03-06T11:10:03.492Z","updatedAt":"2026-03-06T11:10:03.492Z"}
+{"id":"4ALNcld-","description":"automation-scenario-renderer: ステップのフロー構造から Mermaid 図解を自動生成する","stage":"pending","createdAt":"2026-03-06T11:10:07.360Z","updatedAt":"2026-03-06T11:10:07.360Z"}
+{"id":"5OY0Bo9Q","description":"automation-scenario-spec + renderer: 関連シナリオリンク (See Also) をスキーマ定義し Markdown に出力する","stage":"pending","createdAt":"2026-03-06T11:10:11.312Z","updatedAt":"2026-03-06T11:10:11.312Z"}
