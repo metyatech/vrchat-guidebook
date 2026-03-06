@@ -4,6 +4,9 @@ import DefaultTheme from "vitepress/theme";
 import "./custom.css";
 import GiscusComments from "./GiscusComments.vue";
 import MetaBadges from "./MetaBadges.vue";
+import ShareButtons from "./ShareButtons.vue";
+import FeedbackWidget from "./FeedbackWidget.vue";
+import JsonLd from "./JsonLd.vue";
 
 let overlay: HTMLDivElement | undefined;
 let overlayImage: HTMLImageElement | undefined;
@@ -79,7 +82,8 @@ export default {
   Layout() {
     return h(DefaultTheme.Layout, null, {
       "doc-before": () => h(MetaBadges),
-      "doc-after": () => h(GiscusComments)
+      "doc-after": () => [h(FeedbackWidget), h(ShareButtons), h(GiscusComments)],
+      "doc-bottom": () => h(JsonLd)
     });
   },
   setup() {
