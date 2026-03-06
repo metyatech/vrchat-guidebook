@@ -511,7 +511,11 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
     scenario.outputs = outputs;
   }
 
-  return {
+  const assetBaseUrl = job.asset_base_url
+    ? interpolateString(job.asset_base_url, context)
+    : undefined;
+
+  const compiled = {
     job_id: job.job_id,
     profile_id: profile.profile_id,
     blueprint_id: blueprint.blueprint_id,
@@ -521,6 +525,12 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
     markdown_path: markdownPath,
     scenario
   };
+
+  if (assetBaseUrl) {
+    compiled.asset_base_url = assetBaseUrl;
+  }
+
+  return compiled;
 }
 
 function compileMatrix({

@@ -9,9 +9,8 @@ function buildRunPlan({ compiledMatrix, recordVideo = true }) {
   }
 
   const flag = recordVideo ? "true" : "false";
-  return compiledMatrix.jobs.map((job) => ({
-    job_id: job.job_id,
-    args: [
+  return compiledMatrix.jobs.map((job) => {
+    const args = [
       "run-scenario",
       "--scenario",
       job.scenario_path,
@@ -21,8 +20,12 @@ function buildRunPlan({ compiledMatrix, recordVideo = true }) {
       job.markdown_path,
       "--record-video",
       flag
-    ]
-  }));
+    ];
+    if (job.asset_base_url) {
+      args.push("--asset-base-url", job.asset_base_url);
+    }
+    return { job_id: job.job_id, args };
+  });
 }
 
 function buildStudioInvocation({ cwd, args }) {
