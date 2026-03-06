@@ -29,7 +29,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
     "@eslint/js": "^10.0.1",
-    "@metyatech/automation-scenario-studio": "https://codeload.github.com/metyatech/automation-scenario-studio/tar.gz/0239937c8eb5c3bf7c246bdac7082f6fee5f91bf",
+    "@metyatech/automation-scenario-studio": "https://codeload.github.com/metyatech/automation-scenario-studio/tar.gz/85eb41fee5dfe26b79d06f5570fb00f639367f37",
     "@playwright/test": "^1.55.0",
     "cross-env": "^10.1.0",
     "eslint": "^10.0.1",

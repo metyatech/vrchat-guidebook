@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Dynamic per-page OGP meta tags via `transformHead` hook.
+- Mermaid.js diagram support via `vitepress-plugin-mermaid`.
+- Giscus comments on all doc pages (GitHub Discussions-based).
+- MetaBadges component placeholder (disabled until automation pipeline computes values).
+- SNS share buttons (X/Twitter, Discord URL copy).
+- "この記事は役に立ちましたか？" feedback widget with localStorage persistence.
+- JSON-LD structured data (WebPage schema) for SEO.
+
+### Changed
+
+- Updated `automation-scenario-studio` dependency to latest (includes renderer with number_badge, video tag, mermaid flowchart, related scenarios).
+
 ## [0.1.0] - 2026-02-23
 
 ### Added
