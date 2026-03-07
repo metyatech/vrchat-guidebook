@@ -5,4 +5,7 @@ test-results/
 playwright-report/
 artifacts/
 automation/scenarios/generated/
-automation/unity-sample-project/
+automation/unity-sample-project/[Ll]ibrary/
+automation/unity-sample-project/[Tt]emp/
+automation/unity-sample-project/[Ll]ogs/
+automation/unity-sample-project/[Uu]ser[Ss]ettings/
