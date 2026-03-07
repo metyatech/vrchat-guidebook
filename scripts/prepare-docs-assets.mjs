@@ -11,7 +11,8 @@ const assets = [
   "unity-editor-basic/screenshots/open-unity-editor.png",
   "unity-editor-basic/screenshots/drag-hierarchy-item.png",
   "web-example/screenshots/open-example.png",
-  "web-example/screenshots/click-more-info.png"
+  "web-example/screenshots/click-more-info.png",
+  "web-example/animation/web-example.gif"
 ];
 
 async function main() {

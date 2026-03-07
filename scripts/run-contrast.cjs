@@ -4,7 +4,7 @@ const { spawn } = require("node:child_process");
 const handler = require("serve-handler");
 
 const host = "127.0.0.1";
-const port = 4175;
+const port = 4176;
 const publicDir = path.resolve(process.cwd(), "docs/.vitepress/dist");
 const playwrightCli = path.resolve(process.cwd(), "node_modules/@playwright/test/cli.js");
 const playwrightConfig = path.resolve(process.cwd(), "playwright.a11y.config.cjs");

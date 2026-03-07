@@ -26,5 +26,12 @@
         "locator": "{{profile.selectors.primary_link}}"
       }
     }
-  ]
+  ],
+  "outputs_template": {
+    "animation": {
+      "enabled": true,
+      "format": "gif",
+      "fps": 2
+    }
+  }
 }

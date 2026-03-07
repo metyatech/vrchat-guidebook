@@ -12,14 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dynamic per-page OGP meta tags via `transformHead` hook.
 - Mermaid.js diagram support via `vitepress-plugin-mermaid`.
 - Giscus comments on all doc pages (GitHub Discussions-based).
-- MetaBadges component placeholder (disabled until automation pipeline computes values).
+- MetaBadges auto-computed from pipeline step metadata (difficulty, time estimate, step count).
 - SNS share buttons (X/Twitter, Discord URL copy).
 - "この記事は役に立ちましたか？" feedback widget with localStorage persistence.
 - JSON-LD structured data (WebPage schema) for SEO.
+- `assetBaseUrl` support in portable automation matrix for VitePress-compatible asset paths.
+- Animation generation support via scenario `outputs.animation` config.
 
 ### Changed
 
-- Updated `automation-scenario-studio` dependency to latest (includes renderer with number_badge, video tag, mermaid flowchart, related scenarios).
+- Updated `automation-scenario-studio` dependency with assetBaseUrl, animation, and frontmatter support.
 
 ## [0.1.0] - 2026-02-23
 

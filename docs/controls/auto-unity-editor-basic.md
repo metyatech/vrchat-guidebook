@@ -1,8 +1,23 @@
+---
+stepCount: 2
+difficulty: Easy
+timeEstimate: "1分以内"
+---
+
 # Unity-Editor-Basic
 
-Scenario ID: `unity-editor-basic`
+<!-- scenario_id: unity-editor-basic -->
 
-[操作動画](/guide-assets/unity-editor-basic/video/unity-basic-annotated.mp4)
+<video controls preload="metadata" style="max-width:100%">
+  <source src="/guide-assets/unity-editor-basic/video/unity-basic-annotated.mp4" type="video/mp4">
+</video>
+
+```mermaid
+graph TD
+  step0["Open Unity Editor"]
+  step1["Drag item to Scene view"]
+  step0 --> step1
+```
 
 ## 1. Open Unity Editor
 

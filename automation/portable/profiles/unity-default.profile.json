@@ -9,7 +9,7 @@
   },
   "capabilities": {},
   "unity": {
-    "execution_mode": "launch",
+    "execution_mode": "attach",
     "project_path": "./automation/unity-sample-project",
     "window_hint": "Unity",
     "menu_paths": {

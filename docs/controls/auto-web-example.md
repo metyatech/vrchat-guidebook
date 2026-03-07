@@ -12,6 +12,8 @@ timeEstimate: "1分以内"
   <source src="/guide-assets/web-example/video/web-example-annotated.mp4" type="video/mp4">
 </video>
 
+![Web-Example](/guide-assets/web-example/animation/web-example.gif)
+
 ```mermaid
 graph TD
   step0["Open example.com"]
