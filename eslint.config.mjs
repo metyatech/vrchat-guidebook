@@ -27,7 +27,7 @@ export default [
     }
   },
   {
-    files: ["tests/a11y/**/*.js", "tests/a11y/**/*.spec.js"],
+    files: ["tests/a11y/**/*.js", "tests/a11y/**/*.spec.js", "tests/a11y/**/*.spec.cjs"],
     languageOptions: {
       globals: {
         ...globals.node,

@@ -8,7 +8,7 @@
 
 **Tech Stack:** Node.js (CJS), semver, built-in `node:test`, existing `automation-scenario` CLI.
 
-### Task 1: Define portable data contracts
+## Task 1: Define portable data contracts
 
 **Files:**
 
@@ -16,30 +16,30 @@
 - Create: `automation/portable/examples/*.json`
 - Test: `tests/automation/portable.contracts.test.cjs`
 
-**Step 1: Write failing tests for contract expectations**
+### Step 1: Write failing tests for contract expectations
 
-```
-assert.equal(result.ok, true)
+```javascript
+assert.equal(result.ok, true);
 ```
 
-**Step 2: Run test to verify it fails**
+### Step 2: Run test to verify it fails
 
 Run: `node --test tests/automation/portable.contracts.test.cjs`
 Expected: FAIL because parser/validator does not exist yet.
 
-**Step 3: Implement minimal validator/parsing layer**
+### Step 3: Implement minimal validator/parsing layer
 
-```
-const profile = loadJson(path)
-validateProfile(profile)
+```javascript
+const profile = loadJson(path);
+validateProfile(profile);
 ```
 
-**Step 4: Run test to verify it passes**
+### Step 4: Run test to verify it passes
 
 Run: `node --test tests/automation/portable.contracts.test.cjs`
 Expected: PASS.
 
-### Task 2: Build compiler with capability/version gating
+## Task 2: Build compiler with capability/version gating
 
 **Files:**
 
@@ -47,31 +47,31 @@ Expected: PASS.
 - Create: `automation/portable/lib/conditions.cjs`
 - Test: `tests/automation/portable.compiler.test.cjs`
 
-**Step 1: Write failing tests for interpolation/refs/conditions**
+### Step 1: Write failing tests for interpolation/refs/conditions
 
-```
-const compiled = compileMatrix(input)
-assert.equal(compiled.jobs.length, 1)
+```javascript
+const compiled = compileMatrix(input);
+assert.equal(compiled.jobs.length, 1);
 ```
 
-**Step 2: Run test to verify it fails**
+### Step 2: Run test to verify it fails
 
 Run: `node --test tests/automation/portable.compiler.test.cjs`
 Expected: FAIL with missing module/function.
 
-**Step 3: Implement minimal compiler**
+### Step 3: Implement minimal compiler
 
-```
-const manifest = compileMatrix(input)
-assert.equal(Array.isArray(manifest.jobs), true)
+```javascript
+const manifest = compileMatrix(input);
+assert.equal(Array.isArray(manifest.jobs), true);
 ```
 
-**Step 4: Run test to verify it passes**
+### Step 4: Run test to verify it passes
 
 Run: `node --test tests/automation/portable.compiler.test.cjs`
 Expected: PASS.
 
-### Task 3: Add runner CLI and dry-run safety
+## Task 3: Add runner CLI and dry-run safety
 
 **Files:**
 
@@ -80,30 +80,30 @@ Expected: PASS.
 - Test: `tests/automation/portable.runner.test.cjs`
 - Modify: `package.json`
 
-**Step 1: Write failing tests for command planning**
+### Step 1: Write failing tests for command planning
 
-```
-const plan = await runCompiledJobs({ dryRun: true })
-assert.equal(plan.length > 0, true)
+```javascript
+const plan = await runCompiledJobs({ dryRun: true });
+assert.equal(plan.length > 0, true);
 ```
 
-**Step 2: Run test to verify it fails**
+### Step 2: Run test to verify it fails
 
 Run: `node --test tests/automation/portable.runner.test.cjs`
 Expected: FAIL.
 
-**Step 3: Implement CLI/runner**
+### Step 3: Implement CLI/runner
 
-```
-await runCli(["compile", "--matrix", "path/to/matrix.json"])
+```javascript
+await runCli(["compile", "--matrix", "path/to/matrix.json"]);
 ```
 
-**Step 4: Run test to verify it passes**
+### Step 4: Run test to verify it passes
 
 Run: `node --test tests/automation/portable.runner.test.cjs`
 Expected: PASS.
 
-### Task 4: Integrate repository workflows
+## Task 4: Integrate repository workflows
 
 **Files:**
 
@@ -112,32 +112,32 @@ Expected: PASS.
 - Create: `automation/portable/profiles/*.json`
 - Create: `automation/portable/matrices/default.matrix.json`
 
-**Step 1: Add failing integration test for compile output paths**
+### Step 1: Add failing integration test for compile output paths
 
-```
-await compileFromFiles(options)
-assert.equal(fileExists(scenarioPath), true)
+```javascript
+await compileFromFiles(options);
+assert.equal(fileExists(scenarioPath), true);
 ```
 
-**Step 2: Run test to verify it fails**
+### Step 2: Run test to verify it fails
 
 Run: `npm run test:automation`
 Expected: FAIL before integration wiring.
 
-**Step 3: Implement workflow scripts and sample portable assets**
+### Step 3: Implement workflow scripts and sample portable assets
 
-```
+```json
 {
   "test:automation": "node --test tests/automation/*.test.cjs"
 }
 ```
 
-**Step 4: Run tests to verify pass**
+### Step 4: Run tests to verify pass
 
 Run: `npm run test:automation`
 Expected: PASS.
 
-### Task 5: Documentation and final verification
+## Task 5: Documentation and final verification
 
 **Files:**
 
@@ -146,23 +146,23 @@ Expected: PASS.
 - Modify: `docs/controls/index.md`
 - Modify: `docs/.vitepress/config.mts`
 
-**Step 1: Document CLI args and E2E examples**
+### Step 1: Document CLI args and E2E examples
 
-```
+```markdown
 Include compile/run/scaffold examples and profile customization workflow.
 ```
 
-**Step 2: Run full verification suite**
+### Step 2: Run full verification suite
 
 Run: `npm run verify`
 Expected: PASS.
 
-**Step 3: Run portable automation tests**
+### Step 3: Run portable automation tests
 
 Run: `npm run test:automation`
 Expected: PASS.
 
-**Step 4: Confirm no unintended generated artifacts are committed**
+### Step 4: Confirm no unintended generated artifacts are committed
 
 Run: `git status --short`
 Expected: only source/docs/test changes.
