@@ -38,23 +38,31 @@ npm run lint:a11y
 npm run lint:contrast
 ```
 
-`Playwright + axe-core` で `light/dark` 両モードと `default/hover/focus` のコントラストを自動検査します。
+`Playwright + axe-core` で `light/dark` 両モードと `default/hover/focus`
+のコントラストを自動検査します。
 
 ## Portable automation for guide generation
 
-This repository uses a profile-driven portable automation layer on top of `@metyatech/automation-scenario-studio`.
+This repository uses a profile-driven portable automation layer on top of
+`@metyatech/automation-scenario-studio`.
 
 The portability model separates concerns into four data types:
 
-- `automation/portable/profiles/*.profile.json`: avatar/project-specific state (paths, versions, selectors, anchors)
-- `automation/portable/blueprints/*.blueprint.json`: reusable operation logic without avatar-specific values
-- `automation/portable/matrices/*.matrix.json`: execution mapping for profile x blueprint combinations
+- `automation/portable/profiles/*.profile.json`: avatar/project-specific state (paths, versions,
+  selectors, anchors)
+- `automation/portable/blueprints/*.blueprint.json`: reusable operation logic without
+  avatar-specific values
+- `automation/portable/matrices/*.matrix.json`: execution mapping for profile x blueprint
+  combinations
 - `automation/portable/capabilities/*.json`: version-aware capability rules for conditional steps
 
-The compiler resolves templates and conditions into deterministic generated scenarios under `automation/scenarios/generated/`.
-Those scenarios are emitted as `automation-scenario` schema `2.0.0` and then executed to regenerate markdown, screenshots, videos, and `steps.json`.
-Blueprint steps can be authored either as compact `action + params_template` entries or full `step_template` objects for control/group structures.
-For cross-project portability, legacy compact params support fallback arrays such as `menu_path_candidates` and `hierarchy_paths`, which are translated into runtime fallback execution.
+The compiler resolves templates and conditions into deterministic generated scenarios under
+`automation/scenarios/generated/`. Those scenarios are emitted as `automation-scenario` schema
+`2.0.0` and then executed to regenerate markdown, screenshots, videos, and `steps.json`. Blueprint
+steps can be authored either as compact `action + params_template` entries or full `step_template`
+objects for control/group structures. For cross-project portability, legacy compact params support
+fallback arrays such as `menu_path_candidates` and `hierarchy_paths`, which are translated into
+runtime fallback execution.
 
 ### Portable commands
 

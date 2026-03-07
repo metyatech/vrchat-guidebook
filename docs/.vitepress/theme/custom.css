@@ -47,6 +47,7 @@
   --guide-control-bg: #e8f0ff;
   --guide-control-key-bg: #d8e7ff;
   --guide-code-border: #315e97;
+  --vp-code-block-bg: #fdfdff;
 }
 
 .dark {
@@ -95,6 +96,7 @@
   --guide-control-bg: #11233f;
   --guide-control-key-bg: #0e1c33;
   --guide-code-border: #8cc9ff;
+  --vp-code-block-bg: #0a1528;
 }
 
 .Layout {
@@ -206,7 +208,10 @@
   border-radius: 14px;
   padding: 1rem;
   background: var(--guide-card-bg);
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   color: inherit;
   text-decoration: none;
 }

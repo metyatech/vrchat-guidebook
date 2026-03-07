@@ -1,24 +1,20 @@
-"use strict";
+'use strict';
 
-const path = require("node:path");
-const {
-  validateProfile,
-  validateBlueprint,
-  validateMatrix,
-} = require("./contracts.cjs");
-const { evaluateCondition, getPathValue } = require("./conditions.cjs");
+const path = require('node:path');
+const { validateProfile, validateBlueprint, validateMatrix } = require('./contracts.cjs');
+const { evaluateCondition, getPathValue } = require('./conditions.cjs');
 
 function sanitizeId(input) {
   return String(input)
     .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-_]/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-_]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
 function interpolateString(template, context) {
-  if (typeof template !== "string") {
+  if (typeof template !== 'string') {
     return template;
   }
   const matcher = /\{\{\s*([a-zA-Z0-9_.-]+)\s*\}\}/g;
@@ -35,18 +31,18 @@ function resolveTemplateValue(value, context) {
   if (Array.isArray(value)) {
     return value.map((item) => resolveTemplateValue(item, context));
   }
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     return interpolateString(value, context);
   }
-  if (value && typeof value === "object") {
-    if (typeof value.$ref === "string") {
+  if (value && typeof value === 'object') {
+    if (typeof value.$ref === 'string') {
       const resolved = getPathValue(context, value.$ref);
       if (resolved === undefined || resolved === null) {
         throw new Error(`missing required reference "${value.$ref}"`);
       }
       return resolved;
     }
-    if (typeof value.$template === "string") {
+    if (typeof value.$template === 'string') {
       return interpolateString(value.$template, context);
     }
     const output = {};
@@ -59,29 +55,31 @@ function resolveTemplateValue(value, context) {
 }
 
 function normalizeLegacyAction(action) {
-  const normalized = String(action || "").trim().toLowerCase();
+  const normalized = String(action || '')
+    .trim()
+    .toLowerCase();
   switch (normalized) {
-    case "drag":
-      return "drag_drop";
-    case "type":
-      return "type_text";
-    case "wait":
-      return "wait_for";
-    case "keys":
-    case "shortcut":
-      return "press_keys";
-    case "menu":
-      return "open_menu";
+    case 'drag':
+      return 'drag_drop';
+    case 'type':
+      return 'type_text';
+    case 'wait':
+      return 'wait_for';
+    case 'keys':
+    case 'shortcut':
+      return 'press_keys';
+    case 'menu':
+      return 'open_menu';
     default:
       return normalized;
   }
 }
 
 function toFiniteNumber(value) {
-  if (typeof value === "number" && Number.isFinite(value)) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
     return value;
   }
-  if (typeof value === "string" && value.trim() !== "") {
+  if (typeof value === 'string' && value.trim() !== '') {
     const parsed = Number(value);
     if (Number.isFinite(parsed)) {
       return parsed;
@@ -91,7 +89,7 @@ function toFiniteNumber(value) {
 }
 
 function isRecord(value) {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
 function toStringList(value) {
@@ -99,27 +97,27 @@ function toStringList(value) {
     return [];
   }
   return value
-    .map((item) => (typeof item === "string" ? item.trim() : ""))
-    .filter((item) => item !== "");
+    .map((item) => (typeof item === 'string' ? item.trim() : ''))
+    .filter((item) => item !== '');
 }
 
 function buildWebTargetFromLocator(locator, stepId) {
-  const normalized = typeof locator === "string" ? locator.trim() : "";
-  if (normalized === "") {
+  const normalized = typeof locator === 'string' ? locator.trim() : '';
+  if (normalized === '') {
     throw new Error(`step "${stepId}" requires params.locator as non-empty string.`);
   }
 
-  if (normalized.startsWith("css:")) {
+  if (normalized.startsWith('css:')) {
     return {
-      strategy: "web",
+      strategy: 'web',
       web: {
         css: normalized.slice(4),
       },
     };
   }
-  if (normalized.startsWith("xpath:")) {
+  if (normalized.startsWith('xpath:')) {
     return {
-      strategy: "web",
+      strategy: 'web',
       web: {
         xpath: normalized.slice(6),
       },
@@ -127,7 +125,7 @@ function buildWebTargetFromLocator(locator, stepId) {
   }
 
   return {
-    strategy: "web",
+    strategy: 'web',
     web: {
       css: normalized,
     },
@@ -136,7 +134,7 @@ function buildWebTargetFromLocator(locator, stepId) {
 
 function readRequiredString(params, key, stepId) {
   const value = params[key];
-  if (typeof value !== "string" || value.trim() === "") {
+  if (typeof value !== 'string' || value.trim() === '') {
     throw new Error(`step "${stepId}" requires params.${key} as non-empty string.`);
   }
   return value;
@@ -146,12 +144,10 @@ function readCoordinateTarget(params, xKey, yKey, stepId) {
   const xRatio = toFiniteNumber(params[xKey]);
   const yRatio = toFiniteNumber(params[yKey]);
   if (xRatio === undefined || yRatio === undefined) {
-    throw new Error(
-      `step "${stepId}" requires numeric params.${xKey} and params.${yKey}.`
-    );
+    throw new Error(`step "${stepId}" requires numeric params.${xKey} and params.${yKey}.`);
   }
   return {
-    strategy: "coordinate",
+    strategy: 'coordinate',
     coordinate: {
       x_ratio: xRatio,
       y_ratio: yRatio,
@@ -192,16 +188,14 @@ function pickBoxSizeInput(params) {
 function compileLegacyStep(step, params, context) {
   if (!isRecord(params)) {
     throw new Error(
-      `step "${step.id}" params_template must resolve to an object. Received: ${typeof params}`
+      `step "${step.id}" params_template must resolve to an object. Received: ${typeof params}`,
     );
   }
 
   const id = interpolateString(step.id, context);
   const title = interpolateString(step.title, context);
   const description =
-    step.description !== undefined
-      ? interpolateString(step.description, context)
-      : undefined;
+    step.description !== undefined ? interpolateString(step.description, context) : undefined;
   const action = normalizeLegacyAction(step.action);
   const scenarioTarget = context.blueprint && context.blueprint.target;
   const timing = buildTiming(params);
@@ -209,11 +203,11 @@ function compileLegacyStep(step, params, context) {
   const compiled = {
     id,
     title,
-    kind: "action",
+    kind: 'action',
     action,
   };
 
-  if (description && description.trim() !== "") {
+  if (description && description.trim() !== '') {
     compiled.description = description;
   }
   if (timing) {
@@ -227,19 +221,19 @@ function compileLegacyStep(step, params, context) {
     }
   }
 
-  if (action === "open_url") {
+  if (action === 'open_url') {
     compiled.input = {
-      url: readRequiredString(params, "url", id),
+      url: readRequiredString(params, 'url', id),
     };
     return compiled;
   }
 
-  if (action === "click" || action === "double_click" || action === "right_click") {
-    if (scenarioTarget === "web") {
+  if (action === 'click' || action === 'double_click' || action === 'right_click') {
+    if (scenarioTarget === 'web') {
       compiled.target = buildWebTargetFromLocator(params.locator, id);
       return compiled;
     }
-    compiled.target = readCoordinateTarget(params, "x_ratio", "y_ratio", id);
+    compiled.target = readCoordinateTarget(params, 'x_ratio', 'y_ratio', id);
     const input = pickBoxSizeInput(params);
     if (input) {
       compiled.input = input;
@@ -247,15 +241,15 @@ function compileLegacyStep(step, params, context) {
     return compiled;
   }
 
-  if (action === "drag_drop") {
-    compiled.target = readCoordinateTarget(params, "to_x_ratio", "to_y_ratio", id);
+  if (action === 'drag_drop') {
+    compiled.target = readCoordinateTarget(params, 'to_x_ratio', 'to_y_ratio', id);
     compiled.input = {
-      source: readCoordinateTarget(params, "from_x_ratio", "from_y_ratio", id),
+      source: readCoordinateTarget(params, 'from_x_ratio', 'from_y_ratio', id),
     };
     return compiled;
   }
 
-  if (action === "open_menu") {
+  if (action === 'open_menu') {
     const menuPathCandidates = toStringList(params.menu_path_candidates);
     if (menuPathCandidates.length > 0) {
       compiled.input = {
@@ -265,21 +259,21 @@ function compileLegacyStep(step, params, context) {
       return compiled;
     }
 
-    compiled.input = { menu_path: readRequiredString(params, "menu_path", id) };
+    compiled.input = { menu_path: readRequiredString(params, 'menu_path', id) };
     return compiled;
   }
 
-  if (action === "select_hierarchy") {
+  if (action === 'select_hierarchy') {
     const hierarchyCandidates = toStringList(params.hierarchy_paths);
     if (hierarchyCandidates.length > 0) {
       const [firstPath, ...fallbackPaths] = hierarchyCandidates;
       compiled.target = {
-        strategy: "unity_hierarchy",
+        strategy: 'unity_hierarchy',
         unity_hierarchy: {
           path: firstPath,
         },
         fallbacks: fallbackPaths.map((candidatePath) => ({
-          strategy: "unity_hierarchy",
+          strategy: 'unity_hierarchy',
           unity_hierarchy: {
             path: candidatePath,
           },
@@ -289,25 +283,22 @@ function compileLegacyStep(step, params, context) {
     }
 
     compiled.target = {
-      strategy: "unity_hierarchy",
-      unity_hierarchy: { path: readRequiredString(params, "hierarchy_path", id) },
+      strategy: 'unity_hierarchy',
+      unity_hierarchy: { path: readRequiredString(params, 'hierarchy_path', id) },
     };
     return compiled;
   }
 
-  if (action === "type_text") {
+  if (action === 'type_text') {
     const input = {};
-    if (typeof params.text === "string") {
+    if (typeof params.text === 'string') {
       input.text = params.text;
     }
     if (Object.keys(input).length > 0) {
       compiled.input = input;
     }
-    if (
-      params.x_ratio !== undefined &&
-      params.y_ratio !== undefined
-    ) {
-      compiled.target = readCoordinateTarget(params, "x_ratio", "y_ratio", id);
+    if (params.x_ratio !== undefined && params.y_ratio !== undefined) {
+      compiled.target = readCoordinateTarget(params, 'x_ratio', 'y_ratio', id);
       const boxInput = pickBoxSizeInput(params);
       if (boxInput) {
         compiled.input = {
@@ -319,7 +310,7 @@ function compileLegacyStep(step, params, context) {
     return compiled;
   }
 
-  if (action === "wait_for") {
+  if (action === 'wait_for') {
     const input = {};
     const seconds = toFiniteNumber(params.seconds);
     if (seconds !== undefined) {
@@ -331,11 +322,11 @@ function compileLegacyStep(step, params, context) {
     return compiled;
   }
 
-  if (action === "press_keys") {
+  if (action === 'press_keys') {
     const shortcut =
-      typeof params.shortcut === "string" && params.shortcut.trim() !== ""
+      typeof params.shortcut === 'string' && params.shortcut.trim() !== ''
         ? params.shortcut
-        : typeof params.keys === "string" && params.keys.trim() !== ""
+        : typeof params.keys === 'string' && params.keys.trim() !== ''
           ? params.keys
           : undefined;
     if (shortcut) {
@@ -344,18 +335,18 @@ function compileLegacyStep(step, params, context) {
     return compiled;
   }
 
-  if (action === "assert") {
-    if (typeof params.text === "string" && params.text.trim() !== "") {
+  if (action === 'assert') {
+    if (typeof params.text === 'string' && params.text.trim() !== '') {
       compiled.input = { text: params.text };
     }
     return compiled;
   }
 
   if (
-    action === "screenshot" ||
-    action === "start_video" ||
-    action === "stop_video" ||
-    action === "emit_annotation"
+    action === 'screenshot' ||
+    action === 'start_video' ||
+    action === 'stop_video' ||
+    action === 'emit_annotation'
   ) {
     return compiled;
   }
@@ -383,17 +374,17 @@ function compileStepTemplate(step, context) {
     compiled.description = interpolateString(step.description, context);
   }
   if (compiled.kind === undefined) {
-    compiled.kind = "action";
+    compiled.kind = 'action';
   }
 
-  if (compiled.kind === "action" && compiled.action === undefined && step.action) {
+  if (compiled.kind === 'action' && compiled.action === undefined && step.action) {
     compiled.action = normalizeLegacyAction(step.action);
   }
 
-  if (typeof compiled.id !== "string" || compiled.id.trim() === "") {
-    throw new Error("compiled step_template must include non-empty id.");
+  if (typeof compiled.id !== 'string' || compiled.id.trim() === '') {
+    throw new Error('compiled step_template must include non-empty id.');
   }
-  if (typeof compiled.title !== "string" || compiled.title.trim() === "") {
+  if (typeof compiled.title !== 'string' || compiled.title.trim() === '') {
     throw new Error(`compiled step_template "${compiled.id}" must include non-empty title.`);
   }
 
@@ -418,10 +409,10 @@ function createCapabilities(profile, capabilityRules, baseContext) {
     : [];
 
   for (const rule of rules) {
-    if (!rule || typeof rule !== "object") {
+    if (!rule || typeof rule !== 'object') {
       continue;
     }
-    if (typeof rule.capability !== "string" || rule.capability.trim() === "") {
+    if (typeof rule.capability !== 'string' || rule.capability.trim() === '') {
       continue;
     }
     const matched = evaluateCondition(rule.when, {
@@ -444,7 +435,7 @@ function createCapabilities(profile, capabilityRules, baseContext) {
 function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
   if (profile.target !== blueprint.target) {
     throw new Error(
-      `target mismatch for job "${job.job_id}": profile is "${profile.target}" but blueprint is "${blueprint.target}".`
+      `target mismatch for job "${job.job_id}": profile is "${profile.target}" but blueprint is "${blueprint.target}".`,
     );
   }
 
@@ -476,7 +467,7 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
   const scenarioId = sanitizeId(
     job.scenario_id_template
       ? interpolateString(job.scenario_id_template, context)
-      : `${blueprint.blueprint_id}-${profile.profile_id}`
+      : `${blueprint.blueprint_id}-${profile.profile_id}`,
   );
   const scenarioName = job.scenario_name_template
     ? interpolateString(job.scenario_name_template, context)
@@ -484,22 +475,22 @@ function compileJob({ job, profile, blueprint, matrix, capabilityRules }) {
 
   const scenarioPath = interpolateString(
     job.scenario_path_template ||
-      path.join("automation", "scenarios", "generated", `${scenarioId}.scenario.json`),
+      path.join('automation', 'scenarios', 'generated', `${scenarioId}.scenario.json`),
     {
       ...context,
       scenario: { id: scenarioId, name: scenarioName },
-    }
+    },
   );
 
   const outputDir = job.output_dir_template
     ? interpolateString(job.output_dir_template, context)
-    : path.join("artifacts", scenarioId);
+    : path.join('artifacts', scenarioId);
   const markdownPath = job.markdown_path_template
     ? interpolateString(job.markdown_path_template, context)
-    : path.join("docs", "controls", `auto-${scenarioId}.md`);
+    : path.join('docs', 'controls', `auto-${scenarioId}.md`);
 
   const scenario = {
-    schema_version: "2.0.0",
+    schema_version: '2.0.0',
     scenario_id: scenarioId,
     name: scenarioName,
     target: blueprint.target,
@@ -536,7 +527,7 @@ function compileMatrix({
   matrix,
   profilesById,
   blueprintsById,
-  capabilityRules = { schema_version: "1.0.0", rules: [] },
+  capabilityRules = { schema_version: '1.0.0', rules: [] },
 }) {
   validateMatrix(matrix);
 
@@ -546,12 +537,12 @@ function compileMatrix({
 
     if (!profile) {
       throw new Error(
-        `profile "${job.profile_id}" referenced by job "${job.job_id}" was not found.`
+        `profile "${job.profile_id}" referenced by job "${job.job_id}" was not found.`,
       );
     }
     if (!blueprint) {
       throw new Error(
-        `blueprint "${job.blueprint_id}" referenced by job "${job.job_id}" was not found.`
+        `blueprint "${job.blueprint_id}" referenced by job "${job.job_id}" was not found.`,
       );
     }
 

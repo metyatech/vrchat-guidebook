@@ -1,29 +1,29 @@
-const test = require("node:test");
-const assert = require("node:assert/strict");
+const test = require('node:test');
+const assert = require('node:assert/strict');
 
 const {
   validateProfile,
   validateBlueprint,
   validateMatrix,
-} = require("../../automation/portable/lib/contracts.cjs");
+} = require('../../automation/portable/lib/contracts.cjs');
 
-test("validateProfile accepts a valid unity profile", () => {
+test('validateProfile accepts a valid unity profile', () => {
   const profile = {
-    schema_version: "1.0.0",
-    profile_id: "alice-pc",
-    name: "Alice PC Profile",
-    target: "unity",
+    schema_version: '1.0.0',
+    profile_id: 'alice-pc',
+    name: 'Alice PC Profile',
+    target: 'unity',
     versions: {
-      unity: "2022.3.22f1",
-      vrchat_sdk: "3.7.0",
+      unity: '2022.3.22f1',
+      vrchat_sdk: '3.7.0',
     },
     capabilities: {
       supports_control_panel: true,
     },
     unity: {
-      execution_mode: "attach",
-      project_path: "./projects/alice",
-      window_hint: "Unity",
+      execution_mode: 'attach',
+      project_path: './projects/alice',
+      window_hint: 'Unity',
     },
     anchors: {
       hierarchy_avatar_root: {
@@ -38,20 +38,20 @@ test("validateProfile accepts a valid unity profile", () => {
   assert.doesNotThrow(() => validateProfile(profile));
 });
 
-test("validateBlueprint rejects mismatched target", () => {
+test('validateBlueprint rejects mismatched target', () => {
   const blueprint = {
-    schema_version: "1.0.0",
-    blueprint_id: "unity-core",
-    name: "Unity Core",
-    target: "unity",
+    schema_version: '1.0.0',
+    blueprint_id: 'unity-core',
+    name: 'Unity Core',
+    target: 'unity',
     metadata_template: {},
     steps: [
       {
-        id: "open",
-        title: "Open",
-        action: "open_url",
+        id: 'open',
+        title: 'Open',
+        action: 'open_url',
         params_template: {
-          url: "https://example.com",
+          url: 'https://example.com',
         },
       },
     ],
@@ -59,39 +59,36 @@ test("validateBlueprint rejects mismatched target", () => {
 
   assert.throws(
     () => validateBlueprint(blueprint),
-    /unsupported action "open_url" for target "unity"/i
+    /unsupported action "open_url" for target "unity"/i,
   );
 });
 
-test("validateMatrix requires at least one job", () => {
+test('validateMatrix requires at least one job', () => {
   const matrix = {
-    schema_version: "1.0.0",
-    matrix_id: "default",
+    schema_version: '1.0.0',
+    matrix_id: 'default',
     jobs: [],
   };
 
-  assert.throws(
-    () => validateMatrix(matrix),
-    /must contain at least one job/i
-  );
+  assert.throws(() => validateMatrix(matrix), /must contain at least one job/i);
 });
 
-test("validateBlueprint accepts v2 step_template step", () => {
+test('validateBlueprint accepts v2 step_template step', () => {
   const blueprint = {
-    schema_version: "1.0.0",
-    blueprint_id: "unity-v2-template",
-    name: "Unity V2 Template",
-    target: "unity",
+    schema_version: '1.0.0',
+    blueprint_id: 'unity-v2-template',
+    name: 'Unity V2 Template',
+    target: 'unity',
     metadata_template: {},
     steps: [
       {
-        id: "loop-parts",
-        title: "Loop parts",
+        id: 'loop-parts',
+        title: 'Loop parts',
         step_template: {
-          kind: "control",
-          control: "for_each",
-          items_expression: ["Tail", "Ear_L"],
-          item_variable: "part",
+          kind: 'control',
+          control: 'for_each',
+          items_expression: ['Tail', 'Ear_L'],
+          item_variable: 'part',
           steps: [],
         },
       },

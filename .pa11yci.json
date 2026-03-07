@@ -4,10 +4,7 @@
     "timeout": 60000,
     "hideElements": ".VPSwitchAppearance, .VPSkipLink",
     "chromeLaunchConfig": {
-      "args": [
-        "--no-sandbox",
-        "--disable-dev-shm-usage"
-      ]
+      "args": ["--no-sandbox", "--disable-dev-shm-usage"]
     }
   }
 }

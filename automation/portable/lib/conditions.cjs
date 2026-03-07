@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
-const semver = require("semver");
+const semver = require('semver');
 
 function getPathValue(source, path) {
-  if (typeof path !== "string" || path.trim() === "") {
-    throw new Error("condition path must be a non-empty string.");
+  if (typeof path !== 'string' || path.trim() === '') {
+    throw new Error('condition path must be a non-empty string.');
   }
 
-  const segments = path.split(".");
+  const segments = path.split('.');
   let cursor = source;
   for (const segment of segments) {
-    if (!cursor || typeof cursor !== "object" || !(segment in cursor)) {
+    if (!cursor || typeof cursor !== 'object' || !(segment in cursor)) {
       return undefined;
     }
     cursor = cursor[segment];
@@ -19,7 +19,7 @@ function getPathValue(source, path) {
 }
 
 function normalizeVersion(input) {
-  if (typeof input !== "string" || input.trim() === "") {
+  if (typeof input !== 'string' || input.trim() === '') {
     return null;
   }
 
@@ -35,9 +35,7 @@ function compareVersions(left, right) {
   const leftNormalized = normalizeVersion(left);
   const rightNormalized = normalizeVersion(right);
   if (!leftNormalized || !rightNormalized) {
-    throw new Error(
-      `unable to compare versions: left="${left}" right="${right}"`
-    );
+    throw new Error(`unable to compare versions: left="${left}" right="${right}"`);
   }
   return semver.compare(leftNormalized, rightNormalized);
 }
@@ -46,14 +44,14 @@ function evaluateCondition(condition, context) {
   if (!condition) {
     return true;
   }
-  if (typeof condition === "boolean") {
+  if (typeof condition === 'boolean') {
     return condition;
   }
   if (Array.isArray(condition)) {
-    throw new Error("condition must be an object, not an array.");
+    throw new Error('condition must be an object, not an array.');
   }
-  if (typeof condition !== "object") {
-    throw new Error("condition must be an object.");
+  if (typeof condition !== 'object') {
+    throw new Error('condition must be an object.');
   }
 
   if (Array.isArray(condition.all)) {
@@ -65,7 +63,7 @@ function evaluateCondition(condition, context) {
   if (condition.not !== undefined) {
     return !evaluateCondition(condition.not, context);
   }
-  if (typeof condition.capability === "string") {
+  if (typeof condition.capability === 'string') {
     const value = getPathValue(context, `capabilities.${condition.capability}`);
     return value === true;
   }
@@ -75,9 +73,10 @@ function evaluateCondition(condition, context) {
   }
   if (condition.exists) {
     return (
-      getPathValue(context, typeof condition.exists === "string"
-        ? condition.exists
-        : condition.exists.path) !== undefined
+      getPathValue(
+        context,
+        typeof condition.exists === 'string' ? condition.exists : condition.exists.path,
+      ) !== undefined
     );
   }
   if (condition.version_gte) {
@@ -97,9 +96,7 @@ function evaluateCondition(condition, context) {
     return compareVersions(left, condition.version_lt.value) < 0;
   }
 
-  throw new Error(
-    `unsupported condition: ${JSON.stringify(condition)}`
-  );
+  throw new Error(`unsupported condition: ${JSON.stringify(condition)}`);
 }
 
 module.exports = {

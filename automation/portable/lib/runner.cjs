@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
-const path = require("node:path");
-const { spawn } = require("node:child_process");
+const path = require('node:path');
+const { spawn } = require('node:child_process');
 
 function buildRunPlan({ compiledMatrix, recordVideo = true }) {
   if (!compiledMatrix || !Array.isArray(compiledMatrix.jobs)) {
-    throw new Error("compiledMatrix.jobs is required.");
+    throw new Error('compiledMatrix.jobs is required.');
   }
 
-  const flag = recordVideo ? "true" : "false";
+  const flag = recordVideo ? 'true' : 'false';
   return compiledMatrix.jobs.map((job) => ({
     job_id: job.job_id,
     args: [
-      "run-scenario",
-      "--scenario",
+      'run-scenario',
+      '--scenario',
       job.scenario_path,
-      "--output",
+      '--output',
       job.output_dir,
-      "--markdown",
+      '--markdown',
       job.markdown_path,
-      "--record-video",
+      '--record-video',
       flag,
     ],
   }));
@@ -28,12 +28,12 @@ function buildRunPlan({ compiledMatrix, recordVideo = true }) {
 function buildStudioInvocation({ cwd, args }) {
   const cliPath = path.join(
     cwd,
-    "node_modules",
-    "@metyatech",
-    "automation-scenario-studio",
-    "dist",
-    "src",
-    "cli.js"
+    'node_modules',
+    '@metyatech',
+    'automation-scenario-studio',
+    'dist',
+    'src',
+    'cli.js',
   );
   return {
     command: process.execPath,
@@ -49,19 +49,17 @@ async function spawnStudioCommand(entry, cwd) {
   await new Promise((resolve, reject) => {
     const child = spawn(invocation.command, invocation.args, {
       cwd,
-      stdio: "inherit",
+      stdio: 'inherit',
       shell: false,
     });
-    child.once("error", reject);
-    child.once("exit", (code) => {
+    child.once('error', reject);
+    child.once('exit', (code) => {
       if (code === 0) {
         resolve();
         return;
       }
       reject(
-        new Error(
-          `automation-scenario failed for job "${entry.job_id}" with exit code ${code}.`
-        )
+        new Error(`automation-scenario failed for job "${entry.job_id}" with exit code ${code}.`),
       );
     });
   });

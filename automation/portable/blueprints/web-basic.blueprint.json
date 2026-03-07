@@ -7,6 +7,12 @@
     "start_url": "{{profile.web.start_url}}",
     "browser": "{{profile.web.browser}}"
   },
+  "variables_template": [
+    {
+      "id": "screenshot_enabled",
+      "value": "${TRUE}"
+    }
+  ],
   "steps": [
     {
       "id": "open-example",
