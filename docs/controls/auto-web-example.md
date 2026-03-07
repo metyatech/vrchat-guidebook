@@ -1,3 +1,9 @@
+---
+stepCount: 2
+difficulty: Easy
+timeEstimate: "1分以内"
+---
+
 # Web-Example
 
 <!-- scenario_id: web-example -->
