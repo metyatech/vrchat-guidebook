@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.metyatech.unity-automation-bridge": {
+      "version": "https://github.com/metyatech/robotframework-unity-editor.git?path=unity-package",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1273210b40630cf6932b6bf74f81dc7837a100e9"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
