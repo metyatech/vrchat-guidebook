@@ -2,6 +2,21 @@
 
 VRChat に関する情報をまとめる日本語ガイドサイトです。
 
+[![Accessibility Check](https://github.com/metyatech/vrchat-guidebook/actions/workflows/accessibility-check.yml/badge.svg)](https://github.com/metyatech/vrchat-guidebook/actions/workflows/accessibility-check.yml)
+[![CodeQL Analysis](https://github.com/metyatech/vrchat-guidebook/actions/workflows/codeql.yml/badge.svg)](https://github.com/metyatech/vrchat-guidebook/actions/workflows/codeql.yml)
+
+## ドキュメント
+
+- [LICENSE](LICENSE) (MIT)
+- [CHANGELOG.md](CHANGELOG.md) (Changelog)
+- [SECURITY.md](SECURITY.md) (Security Policy)
+- [CONTRIBUTING.md](CONTRIBUTING.md) (Contributing Guidelines)
+
+## 動作環境
+
+- Node.js: `^20.0.0`
+- Python: `^3.10.0` (Robot Framework 用)
+
 ## 構成
 
 - `docs/controls/`: 操作説明
