@@ -3,6 +3,17 @@
   "private": true,
   "version": "0.1.0",
   "description": "VRChat community guide site built with VitePress",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metyatech/vrchat-guidebook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/metyatech/vrchat-guidebook/issues"
+  },
+  "homepage": "https://github.com/metyatech/vrchat-guidebook#readme",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "docs:prepare": "node scripts/prepare-docs-assets.mjs",
     "docs:dev": "npm run docs:prepare && vitepress dev docs",
