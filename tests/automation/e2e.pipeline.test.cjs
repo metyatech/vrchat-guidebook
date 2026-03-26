@@ -39,8 +39,8 @@ test("web pipeline produces expected artifacts", () => {
   assert.ok(!markdown.includes("../../artifacts"), "no filesystem-relative artifact paths");
 });
 
-test("web pipeline produces screenshot artifacts", () => {
-  const screenshotsDir = path.join(rootDir, "artifacts/web-example/screenshots");
+test("web pipeline includes screenshot assets", () => {
+  const screenshotsDir = path.join(rootDir, "docs/public/guide-assets/web-example/screenshots");
   assert.ok(fs.existsSync(screenshotsDir), "screenshots directory exists");
 
   const files = fs.readdirSync(screenshotsDir);
@@ -51,8 +51,8 @@ test("web pipeline produces screenshot artifacts", () => {
   );
 });
 
-test("web pipeline produces video artifact", () => {
-  const videoDir = path.join(rootDir, "artifacts/web-example/video");
+test("web pipeline includes video asset", () => {
+  const videoDir = path.join(rootDir, "docs/public/guide-assets/web-example/video");
   assert.ok(fs.existsSync(videoDir), "video directory exists");
 
   const files = fs.readdirSync(videoDir);
