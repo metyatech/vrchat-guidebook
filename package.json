@@ -17,6 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify": "npm run lint && npm run format:check && npm run test:automation && npm run docs:build && npm run lint:a11y && npm run lint:contrast",
+    "verify:precommit": "npm run lint && npm run format:check && npm run test:automation && npm run docs:build && npm run lint:a11y",
     "guide:run": "automation-scenario run-scenario",
     "guide:portable:compile": "node automation/portable/cli.cjs compile --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json",
     "guide:portable:run": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json",
