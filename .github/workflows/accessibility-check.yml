@@ -42,6 +42,7 @@ jobs:
           chromium_path="$(find "$HOME/.cache/ms-playwright" -type f -name chrome -perm -111 | head -n 1)"
           test -n "$chromium_path"
           echo "SE_BROWSER_PATH=$chromium_path" >> "$GITHUB_ENV"
+          echo "SE_SKIP_DRIVER_IN_PATH=true" >> "$GITHUB_ENV"
 
       - name: Run accessibility verification
         run: xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' npm run verify
