@@ -1,4 +1,4 @@
 robotframework==7.4.1
 robotframework-seleniumlibrary==6.8.0
 selenium==4.40.0
-robotframework-unity-editor @ git+https://github.com/metyatech/robotframework-unity-editor.git@main
+robotframework-unity-editor @ git+https://github.com/metyatech/robotframework-unity-editor.git@8b98be7fccf278cf49cc5f02e40f5395e9cdf0e4
