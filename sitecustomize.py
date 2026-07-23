@@ -4,8 +4,10 @@ import os
 
 from pathlib import Path
 
+from robot.api import keyword
 from robot.libraries.BuiltIn import BuiltIn
 from robot.libraries import Screenshot as screenshot_library
+from SeleniumLibrary.keywords.window import WindowKeywords
 from SeleniumLibrary.keywords.webdrivertools.webdrivertools import WebDriverCreator
 from selenium import webdriver
 
@@ -55,3 +57,17 @@ def _create_chrome(
 
 
 WebDriverCreator.create_chrome = _create_chrome
+
+
+_original_maximize_browser_window = WindowKeywords.maximize_browser_window
+
+
+@keyword
+def _maximize_browser_window(self):
+    if os.name != "nt":
+        self.driver.set_window_size(1920, 1080)
+        return
+    return _original_maximize_browser_window(self)
+
+
+WindowKeywords.maximize_browser_window = _maximize_browser_window
