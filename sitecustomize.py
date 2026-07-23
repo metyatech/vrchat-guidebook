@@ -4,7 +4,7 @@ import os
 
 from pathlib import Path
 
-from robot.api import keyword
+from robot.api.deco import keyword
 from robot.libraries.BuiltIn import BuiltIn
 from robot.libraries import Screenshot as screenshot_library
 from SeleniumLibrary.keywords.window import WindowKeywords
