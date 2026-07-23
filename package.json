@@ -10,7 +10,7 @@
     "docs:build:local": "npm run docs:prepare && cross-env SITE_URL=http://127.0.0.1:4174 SITE_BASE=/ vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:preview:host": "vitepress preview docs --host 127.0.0.1 --port 4174",
-    "test:automation": "node --test tests/automation/*.test.cjs",
+    "test:automation": "npm run guide:build:web && node --test tests/automation/*.test.cjs",
     "lint:a11y": "npm run docs:prepare && node scripts/run-pa11y.cjs",
     "lint:contrast": "npm run docs:prepare && node scripts/run-contrast.cjs",
     "lint": "eslint .",
@@ -21,7 +21,7 @@
     "guide:portable:compile": "node automation/portable/cli.cjs compile --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json",
     "guide:portable:run": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json",
     "guide:portable:run:dry": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --dry-run true",
-    "guide:build:web": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id web-example",
+    "guide:build:web": "cross-env PYTHONPATH=. node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id web-example",
     "guide:build:unity": "node automation/portable/cli.cjs run --matrix automation/portable/matrices/default.matrix.json --profiles-dir automation/portable/profiles --blueprints-dir automation/portable/blueprints --capabilities automation/portable/capabilities/default.capabilities.json --generated-scenarios automation/scenarios/generated --manifest artifacts/portable/compile-manifest.json --job-id unity-editor-basic",
     "guide:build": "npm run guide:portable:run",
     "prepare": "husky"
